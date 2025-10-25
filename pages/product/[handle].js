@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
+import toast from 'react-hot-toast';
 
 export default function ProductPage({ product }) {
   const { addToCart } = useCart();
@@ -10,33 +11,163 @@ export default function ProductPage({ product }) {
   const [added, setAdded] = useState(false);
 
   if (!product) {
-    return <div style={{ padding: '2rem' }}>Product not found</div>;
+    return (
+      <div className="container" style={{ paddingTop: 'var(--space-2xl)' }}>
+        <p style={{ color: 'var(--color-text-secondary)' }}>Product not found</p>
+        <Link href="/" style={{ fontSize: 'var(--font-sm)', marginTop: 'var(--space-md)', display: 'inline-block' }}>
+          ← Back to shop
+        </Link>
+      </div>
+    );
   }
 
   const priceInfo = product.variants && product.variants[0]
     ? `${product.variants[0].price} ${product.variants[0].currency}`
     : 'N/A';
 
-
   return (
-    <div style={{ padding: '2rem', maxWidth: 800, margin: '0 auto' }}>
-      <div style={{ display: 'flex', gap: 32, marginBottom: 24 }}>
-        {product.image && (
-          <div style={{ flex: '0 0 400px' }}>
-            <Image 
-              src={product.image} 
-              alt={product.imageAlt || product.title}
-              width={400}
-              height={400}
-              priority
-              style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 8 }} 
-            />
+    <div style={{ 
+      paddingTop: 'var(--space-2xl)', 
+      paddingBottom: 'var(--space-2xl)',
+      maxWidth: 'var(--max-width)',
+      margin: '0 auto',
+      padding: '0 var(--space-xl)'
+    }}>
+      {/* Product card - bordered nomenclature style */}
+      <div style={{ 
+        border: '1px solid var(--color-primary)',
+        overflow: 'hidden',
+        marginTop: 'var(--space-2xl)'
+      }}>
+        {/* Navigation section - full width at top */}
+        <div style={{
+          borderBottom: '1px solid var(--color-primary)',
+          padding: 'var(--space-xs) var(--space-lg)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <Link 
+            href="/" 
+            style={{ 
+              fontSize: 'var(--font-xs)',
+              color: 'var(--color-text-muted)',
+              display: 'inline-block',
+              transition: 'color var(--transition-fast)',
+              letterSpacing: '0.05em'
+            }}
+          >
+            ← Shop
+          </Link>
+          
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast.success('Link copied!', {
+                duration: 2000,
+                style: {
+                  fontSize: 'calc(var(--font-xs) * 0.85)',
+                  padding: 'calc(var(--space-xs) * 0.7) var(--space-sm)',
+                  minHeight: 'auto',
+                  maxWidth: '200px'
+                }
+              });
+            }}
+            style={{
+              fontSize: 'var(--font-xs)',
+              color: 'var(--color-text-muted)',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              letterSpacing: '0.05em',
+              transition: 'color var(--transition-fast)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text-muted)';
+            }}
+          >
+            Share
+          </button>
+        </div>
+
+        {/* Main content - image and info side by side */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr'
+        }}>
+          {/* Image - Left side */}
+          {product.image && (
+            <div style={{ 
+              position: 'relative',
+              width: '100%',
+              backgroundColor: 'var(--color-bg-secondary)',
+              aspectRatio: '1 / 1',
+              borderRight: '1px solid var(--color-primary)'
+            }}>
+              <Image 
+                src={product.image} 
+                alt={product.imageAlt || product.title}
+                width={500}
+                height={500}
+                priority
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover',
+                  display: 'block'
+                }} 
+              />
+            </div>
+          )}
+
+          {/* Product Info - Right side with internal borders */}
+          <div style={{ 
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Title section */}
+            <div style={{
+              borderBottom: '1px solid var(--color-primary)',
+              padding: 'var(--space-lg)'
+            }}>
+              <h1 style={{ 
+                fontSize: 'var(--font-2xl)',
+                fontWeight: 500,
+                margin: 0,
+                letterSpacing: '-0.02em',
+                color: 'var(--color-primary)'
+              }}>
+                {product.title}
+              </h1>
+            </div>
+
+          {/* Price section */}
+          <div style={{
+            borderBottom: '1px solid var(--color-primary)',
+            padding: 'var(--space-lg)'
+          }}>
+            <p style={{ 
+              fontSize: 'var(--font-xl)',
+              color: 'var(--color-text-secondary)',
+              margin: 0,
+              fontWeight: 400
+            }}>
+              {priceInfo.split(' ')[0]} <span style={{ fontSize: 'var(--font-base)' }}>{priceInfo.split(' ')[1]}</span>
+            </p>
           </div>
-        )}
-        <div style={{ flex: 1 }}>
-          <h1 style={{ marginTop: 0 }}>{product.title}</h1>
-          <p style={{ fontSize: 24, fontWeight: 'bold', margin: '16px 0' }}>Price: {priceInfo}</p>
-          <div style={{ marginTop: 24 }}>
+
+          {/* Action section */}
+          <div style={{
+            padding: 'var(--space-lg)',
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start'
+          }}>
             <button
               onClick={async () => {
                 if (!product.variants || product.variants.length === 0) return;
@@ -46,22 +177,47 @@ export default function ProductPage({ product }) {
                 setAdding(false);
               }}
               disabled={adding}
-              style={{ padding: '0.75rem 1.5rem', marginRight: 12, fontSize: 16, cursor: 'pointer' }}
-            >
-              {adding ? 'Adding…' : 'Add to cart'}
-            </button>
+              style={{ 
+                padding: 'var(--space-md) var(--space-2xl)',
+                fontSize: 'var(--font-base)',
+                fontWeight: 400,
+                backgroundColor: 'var(--color-primary)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 'var(--border-radius)',
+                cursor: adding ? 'not-allowed' : 'pointer',
+                transition: 'all var(--transition-fast)',
+                width: '100%'
+              }}
+            onMouseEnter={(e) => {
+              if (!adding) {
+                e.currentTarget.style.backgroundColor = '#fff';
+                e.currentTarget.style.color = 'var(--color-primary)';
+                e.currentTarget.style.border = '1px solid var(--color-primary)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+              e.currentTarget.style.color = '#fff';
+              e.currentTarget.style.border = 'none';
+            }}
+          >
+            {adding ? 'Adding…' : 'Add to Cart'}
+          </button>
 
-            {added && (
-              <Link href="/cart">
-                <span style={{ marginLeft: 8, color: '#0070f3' }}>Go to cart →</span>
-              </Link>
-            )}
+          {/* Success message */}
+          {added && (
+            <p style={{ 
+              marginTop: 'var(--space-md)',
+              fontSize: 'var(--font-sm)',
+              color: 'var(--color-text-muted)'
+            }}>
+              Added to cart
+            </p>
+          )}
           </div>
         </div>
-      </div>
-
-      <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #eee' }}>
-        <Link href="/">← Continue shopping</Link>
+        </div>
       </div>
     </div>
   );

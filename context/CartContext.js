@@ -44,8 +44,7 @@ export function CartProvider({ children }) {
       if (resp.data?.checkout) {
         setCheckout(resp.data.checkout);
         if (typeof window !== 'undefined') localStorage.setItem('cartId', resp.data.checkout.id);
-        toast.success('Added to cart!');
-        setIsCartOpen(true); // Auto-open cart drawer
+        setIsCartOpen(true); // Auto-open cart drawer (visual feedback)
         return resp.data.checkout;
       }
 
@@ -115,7 +114,6 @@ export function CartProvider({ children }) {
 
       if (resp.data?.checkout) {
         setCheckout(resp.data.checkout);
-        toast.success('Item removed from cart!');
         return resp.data.checkout;
       }
 

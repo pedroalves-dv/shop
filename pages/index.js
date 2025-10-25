@@ -1,30 +1,189 @@
+import { useState } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
+import Link from 'next/link';
 import ProductCard from '../components/ProductCard';
 
 export default function Home({ products }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const featuredProducts = products.slice(0, 3); // First 3 products as featured
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + featuredProducts.length) % featuredProducts.length);
+  };
+
   return (
-    <div className="container" style={{ paddingTop: 'var(--space-2xl)', paddingBottom: 'var(--space-2xl)' }}>
-      {/* Minimal intro - no fluff, just info */}
+    <>
+      {/* Hero Banner - Full Width Split Layout */}
       <div style={{ 
-        maxWidth: '720px',
-        marginBottom: 'var(--space-2xl)'
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: 0,
+        marginBottom: 'var(--space-xl)',
+        borderTop: '1px solid var(--color-primary)',
+        borderBottom: '1px solid var(--color-primary)',
+        minHeight: '400px'
       }}>
-        <h1 style={{ 
-          fontSize: 'var(--font-2xl)',
-          marginBottom: 'var(--space-md)',
-          fontWeight: 500
+        {/* Left: Slogan */}
+        <div style={{
+          padding: 'var(--space-2xl)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          backgroundColor: '#fff',
+          borderRight: '1px solid var(--color-primary)'
         }}>
-          Precision 3D Prints
-        </h1>
-        <p style={{ 
-          fontSize: 'var(--font-md)',
-          color: 'var(--color-text-secondary)',
-          lineHeight: 1.6,
-          marginBottom: 0
+          <h1 style={{ 
+            fontSize: '4rem',
+            fontWeight: 600,
+            letterSpacing: '-0.02em',
+            lineHeight: 1.2,
+            textAlign: 'left',
+            margin: 0,
+            maxWidth: '500px'
+          }}>
+            Thoughtful and functional design.
+          </h1>
+        </div>
+
+        {/* Right: Featured Product Carousel */}
+        <div style={{
+          position: 'relative',
+          backgroundColor: 'var(--color-bg-secondary)',
+          overflow: 'hidden'
         }}>
-          Designer-crafted objects made with precision. All items are ready to ship.
-        </p>
+          {featuredProducts.map((product, index) => (
+            <Link
+              key={product.id}
+              href={`/product/${encodeURIComponent(product.handle)}`}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: currentSlide === index ? 1 : 0,
+                transition: 'opacity 0.5s ease',
+                pointerEvents: currentSlide === index ? 'auto' : 'none'
+              }}
+            >
+              {product.image && (
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                  <Image
+                    src={product.image}
+                    alt={product.imageAlt || product.title}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    priority={index === 0}
+                  />
+                </div>
+              )}
+            </Link>
+          ))}
+
+          {/* Carousel Controls */}
+          <button
+            onClick={prevSlide}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            style={{
+              position: 'absolute',
+              left: 'var(--space-md)',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(255,255,255,0.9)',
+              border: '1px solid var(--color-primary)',
+              borderRadius: 'var(--border-radius)',
+              width: '40px',
+              height: '40px',
+              cursor: 'pointer',
+              fontSize: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+              color: 'var(--color-primary)',
+              transition: 'all var(--transition-fast)',
+              zIndex: 2
+            }}
+          >
+            <span style={{ display: 'block', marginTop: '-2px' }}>←</span>
+          </button>
+          <button
+            onClick={nextSlide}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.9)';
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            style={{
+              position: 'absolute',
+              right: 'var(--space-md)',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(255,255,255,0.9)',
+              border: '1px solid var(--color-primary)',
+              borderRadius: 'var(--border-radius)',
+              width: '40px',
+              height: '40px',
+              cursor: 'pointer',
+              fontSize: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+              color: 'var(--color-primary)',
+              transition: 'all var(--transition-fast)',
+              zIndex: 2
+            }}
+          >
+            <span style={{ display: 'block', marginTop: '-2px' }}>→</span>
+          </button>
+
+          {/* Slide Indicators */}
+          <div style={{
+            position: 'absolute',
+            bottom: 'var(--space-md)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: 'var(--space-xs)',
+            zIndex: 2
+          }}>
+            {featuredProducts.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                style={{
+                  width: currentSlide === index ? '24px' : '8px',
+                  height: '8px',
+                  borderRadius: '4px',
+                  border: '1px solid #fff',
+                  background: currentSlide === index ? '#fff' : 'transparent',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              />
+            ))}
+          </div>
+        </div>
       </div>
+
+      <div className="container" style={{ paddingTop: 'var(--space-2xl)', paddingBottom: 'var(--space-2xl)' }}>
 
       {/* Product Grid */}
       <div style={{ 
@@ -41,7 +200,8 @@ export default function Home({ products }) {
           />
         ))}
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

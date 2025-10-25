@@ -33,7 +33,7 @@
   /* Layout */
   --max-width: 1280px;
   --border-radius: 2px;
-  --header-height: 64px;
+  --header-height: 56px;
   
   /* Transitions - Fast and snappy */
   --transition-fast: 0.15s ease;
@@ -136,21 +136,11 @@ img {
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-md);
+  padding: 0 var(--space-xl);
 }
 
 @media (min-width: 768px) {
   :root {
     --font-2xl: 3rem;
-  }
-  
-  .container {
-    padding: 0 var(--space-xl);
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding: 0 var(--space-2xl);
   }
 }

@@ -36,10 +36,9 @@ function Header() {
           fontWeight: 500,
           color: 'var(--color-primary)',
           letterSpacing: '-0.01em',
-          textTransform: 'uppercase',
           transition: 'opacity var(--transition-fast)'
         }}>
-          Print Studio
+          Proto
         </Link>
 
         {/* Cart Button - Understated */}
@@ -101,7 +100,34 @@ function CartContent({ Component, pageProps }) {
   
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster 
+        position="top-right"
+        containerStyle={{
+          top: 'var(--header-height)',
+          right: 'calc(50% - var(--max-width) / 2 + var(--space-xl))',
+          marginTop: 'var(--space-md)'
+        }}
+        toastOptions={{
+          duration: 2000,
+          style: {
+            background: 'var(--color-primary)',
+            color: '#fff',
+            fontSize: 'calc(var(--font-xs) * 0.9)',
+            padding: 'calc(var(--space-xs) * 0.8) var(--space-sm)',
+            borderRadius: 'var(--border-radius)',
+            border: '1px solid var(--color-primary)',
+            fontWeight: 400,
+            maxWidth: '250px',
+            minHeight: 'auto'
+          },
+          success: {
+            iconTheme: {
+              primary: '#fff',
+              secondary: 'var(--color-primary)'
+            }
+          }
+        }}
+      />
       <Header />
       <Component {...pageProps} />
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />

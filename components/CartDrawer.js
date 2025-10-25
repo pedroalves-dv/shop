@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { checkout, loading, updateQuantity, removeFromCart, clearCart } = useCart();
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [removingItemId, setRemovingItemId] = useState(null);
 
   const items = checkout?.lineItems?.edges?.map(e => e.node) || [];
   const totalAmount = checkout?.cost?.totalAmount;
@@ -38,6 +41,7 @@ export default function CartDrawer({ isOpen, onClose }) {
         maxWidth: 480,
         backgroundColor: '#fff',
         boxShadow: '-2px 0 8px rgba(0,0,0,0.1)',
+        borderLeft: '1px solid var(--color-primary)',
         zIndex: 1000,
         transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
         transition: 'transform 0.3s ease',
@@ -48,7 +52,7 @@ export default function CartDrawer({ isOpen, onClose }) {
         {/* Header */}
         <div style={{
           padding: '20px',
-          borderBottom: '1px solid #eee',
+          borderBottom: '1px solid var(--color-primary)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center'
@@ -106,98 +110,214 @@ export default function CartDrawer({ isOpen, onClose }) {
 
                 return (
                   <div key={it.id} style={{
-                    display: 'flex',
-                    gap: 12,
-                    padding: 16,
-                    border: '1px solid #eee',
-                    borderRadius: 8,
-                    marginBottom: 12,
-                    alignItems: 'flex-start'
+                    display: 'grid',
+                    gridTemplateColumns: '140px 1fr',
+                    border: '1px solid var(--color-primary)',
+                    borderRadius: 'var(--border-radius)',
+                    overflow: 'hidden',
+                    marginBottom: 'var(--space-md)',
+                    minHeight: '140px'
                   }}>
+                    {/* Image Section */}
                     {image && (
-                      <Image 
-                        src={image} 
-                        alt={title}
-                        width={80}
-                        height={80}
-                        style={{ 
-                          width: 80, 
-                          height: 'auto', 
-                          objectFit: 'cover', 
-                          borderRadius: 6,
-                          flexShrink: 0
-                        }} 
-                      />
-                    )}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <h3 style={{ 
-                        margin: '0 0 4px 0', 
-                        fontSize: 14, 
-                        fontWeight: 500,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
+                      <div style={{ 
+                        borderRight: '1px solid var(--color-primary)',
+                        display: 'flex',
+                        alignItems: 'stretch',
+                        justifyContent: 'center',
+                        backgroundColor: '#fafafa',
+                        overflow: 'hidden'
                       }}>
-                        {title}
-                      </h3>
-                      <p style={{ margin: '0 0 8px 0', color: '#666', fontSize: 13 }}>
-                        {price} {currency}
-                      </p>
-                      
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                        <Image 
+                          src={image} 
+                          alt={title}
+                          width={140}
+                          height={140}
+                          style={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            objectFit: 'cover'
+                          }} 
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Content Section */}
+                    <div style={{ 
+                      paddingTop: 'var(--space-sm)',
+                      paddingLeft: 'var(--space-sm)',
+                      paddingRight: 'var(--space-sm)',
+                      paddingBottom: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start'
+                    }}>
+                      {/* Top: Title & Price */}
+                      <div>
+                        <h3 style={{ 
+                          margin: '0 0 4px 0', 
+                          fontSize: 'var(--font-sm)', 
+                          fontWeight: 500,
+                          color: 'var(--color-primary)',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          {title}
+                        </h3>
+                        <p style={{ 
+                          margin: 0, 
+                          color: 'var(--color-text-secondary)', 
+                          fontSize: 'var(--font-xs)'
+                        }}>
+                          {price} {currency}
+                        </p>
+                      </div>
+
+                      {/* Middle: Quantity Controls */}
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 'var(--space-xs)',
+                        paddingTop: 'var(--space-xs)',
+                        marginTop: 'var(--space-xs)',
+                        borderTop: '1px solid var(--color-primary)',
+                        marginLeft: 'calc(var(--space-sm) * -1)',
+                        marginRight: 'calc(var(--space-sm) * -1)',
+                        paddingLeft: 'var(--space-sm)',
+                        paddingRight: 'var(--space-sm)'
+                      }}>
                         <button 
                           onClick={() => updateQuantity(it.id, Math.max(1, it.quantity - 1))} 
                           disabled={loading || it.quantity <= 1}
                           style={{ 
-                            padding: '4px 10px',
-                            border: '1px solid #ddd',
-                            borderRadius: 4,
-                            background: it.quantity <= 1 ? '#f5f5f5' : '#fff',
+                            padding: '4px 8px',
+                            border: '1px solid var(--color-primary)',
+                            borderRadius: 'var(--border-radius)',
+                            background: it.quantity <= 1 ? 'var(--color-bg-secondary)' : '#fff',
                             cursor: it.quantity <= 1 ? 'not-allowed' : 'pointer',
-                            fontSize: 14
+                            fontSize: 'var(--font-sm)',
+                            color: 'var(--color-primary)',
+                            lineHeight: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                           }}
                         >
                           −
                         </button>
-                        <span style={{ minWidth: 30, textAlign: 'center', fontSize: 14 }}>
+                        <span style={{ 
+                          minWidth: 30, 
+                          textAlign: 'center', 
+                          fontSize: 'var(--font-sm)',
+                          fontWeight: 500
+                        }}>
                           {it.quantity}
                         </span>
                         <button 
                           onClick={() => updateQuantity(it.id, it.quantity + 1)} 
                           disabled={loading}
                           style={{ 
-                            padding: '4px 10px',
-                            border: '1px solid #ddd',
-                            borderRadius: 4,
+                            padding: '4px 8px',
+                            border: '1px solid var(--color-primary)',
+                            borderRadius: 'var(--border-radius)',
                             background: '#fff',
                             cursor: 'pointer',
-                            fontSize: 14
+                            fontSize: 'var(--font-sm)',
+                            color: 'var(--color-primary)',
+                            lineHeight: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                           }}
                         >
                           +
                         </button>
-                        <div style={{ flex: 1, textAlign: 'right' }}>
-                          <strong style={{ fontSize: 14 }}>
-                            {lineTotal} {currency}
-                          </strong>
-                        </div>
                       </div>
 
-                      <button 
-                        onClick={() => removeFromCart(it.id)}
-                        disabled={loading}
-                        style={{ 
-                          padding: '4px 8px',
-                          background: 'none',
-                          color: '#ff4444',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: 12,
-                          textDecoration: 'underline'
-                        }}
-                      >
-                        Remove
-                      </button>
+                      {/* Bottom: Total & Remove */}
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: 'var(--space-sm) var(--space-sm)',
+                        marginTop: 'var(--space-xs)',
+                        borderTop: '1px solid var(--color-primary)',
+                        marginLeft: 'calc(var(--space-sm) * -1)',
+                        marginRight: 'calc(var(--space-sm) * -1)'
+                      }}>
+                        <strong style={{ 
+                          fontSize: 'var(--font-sm)'
+                        }}>
+                          {lineTotal} {currency}
+                        </strong>
+                        
+                        {removingItemId === it.id ? (
+                          <div style={{ 
+                            display: 'flex', 
+                            gap: 6, 
+                            alignItems: 'center'
+                          }}>
+                            <span style={{ fontSize: 'var(--font-xs)', color: 'var(--color-primary)' }}>Remove?</span>
+                            <button 
+                              onClick={() => {
+                                removeFromCart(it.id);
+                                setRemovingItemId(null);
+                              }}
+                              disabled={loading}
+                              style={{ 
+                                padding: '4px 8px',
+                                background: 'var(--color-primary)',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: 'var(--border-radius)',
+                                cursor: 'pointer',
+                                fontSize: 'var(--font-xs)',
+                                fontWeight: 500
+                              }}
+                            >
+                              Yes
+                            </button>
+                            <button 
+                              onClick={() => setRemovingItemId(null)}
+                              style={{ 
+                                padding: '4px 8px',
+                                background: '#fff',
+                                color: 'var(--color-primary)',
+                                border: '1px solid var(--color-primary)',
+                                borderRadius: 'var(--border-radius)',
+                                cursor: 'pointer',
+                                fontSize: 'var(--font-xs)'
+                              }}
+                            >
+                              No
+                            </button>
+                          </div>
+                        ) : (
+                          <button 
+                            onClick={() => setRemovingItemId(it.id)}
+                            disabled={loading}
+                            style={{ 
+                              padding: '4px 8px',
+                              background: 'none',
+                              color: 'var(--color-primary)',
+                              border: '1px solid var(--color-primary)',
+                              borderRadius: 'var(--border-radius)',
+                              cursor: 'pointer',
+                              fontSize: 14,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                            title="Remove item"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
@@ -210,9 +330,66 @@ export default function CartDrawer({ isOpen, onClose }) {
         {items.length > 0 && (
           <div style={{
             padding: '20px',
-            borderTop: '2px solid #eee',
+            borderTop: '1px solid var(--color-primary)',
             backgroundColor: '#fafafa'
           }}>
+            {/* Clear Cart Confirmation */}
+            {showClearConfirm && (
+              <div style={{
+                padding: '12px',
+                marginBottom: '16px',
+                border: '1px solid var(--color-primary)',
+                borderRadius: 2,
+                backgroundColor: '#fff'
+              }}>
+                <p style={{ 
+                  margin: '0 0 10px 0', 
+                  fontSize: 13, 
+                  color: 'var(--color-primary)',
+                  fontWeight: 500
+                }}>
+                  Clear all items from cart?
+                </p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button 
+                    onClick={() => {
+                      clearCart();
+                      setShowClearConfirm(false);
+                      onClose();
+                    }}
+                    style={{ 
+                      flex: 1,
+                      padding: '8px',
+                      background: 'var(--color-primary)',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: 2,
+                      cursor: 'pointer',
+                      fontSize: 13,
+                      fontWeight: 500
+                    }}
+                  >
+                    Yes, Clear
+                  </button>
+                  <button 
+                    onClick={() => setShowClearConfirm(false)}
+                    style={{ 
+                      flex: 1,
+                      padding: '8px',
+                      background: '#fff',
+                      color: 'var(--color-primary)',
+                      border: '1px solid var(--color-primary)',
+                      borderRadius: 2,
+                      cursor: 'pointer',
+                      fontSize: 13
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
@@ -234,13 +411,13 @@ export default function CartDrawer({ isOpen, onClose }) {
               <button style={{ 
                 width: '100%',
                 padding: '14px',
-                background: '#0070f3',
+                background: 'var(--color-primary)',
                 color: '#fff',
                 border: 'none',
-                borderRadius: 6,
+                borderRadius: 'var(--border-radius)',
                 cursor: 'pointer',
-                fontSize: 16,
-                fontWeight: 600
+                fontSize: 'var(--font-base)',
+                fontWeight: 500
               }}>
                 Checkout
               </button>
@@ -253,31 +430,26 @@ export default function CartDrawer({ isOpen, onClose }) {
                   flex: 1,
                   padding: '10px',
                   background: '#fff',
-                  color: '#0070f3',
-                  border: '1px solid #0070f3',
-                  borderRadius: 6,
+                  color: 'var(--color-primary)',
+                  border: '1px solid var(--color-primary)',
+                  borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  fontSize: 14
+                  fontSize: 'var(--font-sm)'
                 }}
               >
                 Continue Shopping
               </button>
               <button 
-                onClick={() => {
-                  if (confirm('Clear cart?')) {
-                    clearCart();
-                    onClose();
-                  }
-                }}
+                onClick={() => setShowClearConfirm(true)}
                 style={{ 
                   flex: 1,
                   padding: '10px',
                   background: '#fff',
-                  color: '#666',
-                  border: '1px solid #ddd',
-                  borderRadius: 6,
+                  color: 'var(--color-primary)',
+                  border: '1px solid var(--color-primary)',
+                  borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  fontSize: 14
+                  fontSize: 'var(--font-sm)'
                 }}
               >
                 Clear Cart
