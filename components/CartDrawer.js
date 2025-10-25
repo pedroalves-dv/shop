@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 export default function CartDrawer({ isOpen, onClose }) {
@@ -114,12 +115,14 @@ export default function CartDrawer({ isOpen, onClose }) {
                     alignItems: 'flex-start'
                   }}>
                     {image && (
-                      <img 
+                      <Image 
                         src={image} 
-                        alt={title} 
+                        alt={title}
+                        width={80}
+                        height={80}
                         style={{ 
                           width: 80, 
-                          height: 80, 
+                          height: 'auto', 
                           objectFit: 'cover', 
                           borderRadius: 6,
                           flexShrink: 0

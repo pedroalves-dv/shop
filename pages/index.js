@@ -3,11 +3,42 @@ import ProductCard from '../components/ProductCard';
 
 export default function Home({ products }) {
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>My 3D Print Shop</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+    <div className="container" style={{ paddingTop: 'var(--space-2xl)', paddingBottom: 'var(--space-2xl)' }}>
+      {/* Minimal intro - no fluff, just info */}
+      <div style={{ 
+        maxWidth: '720px',
+        marginBottom: 'var(--space-2xl)'
+      }}>
+        <h1 style={{ 
+          fontSize: 'var(--font-2xl)',
+          marginBottom: 'var(--space-md)',
+          fontWeight: 500
+        }}>
+          Precision 3D Prints
+        </h1>
+        <p style={{ 
+          fontSize: 'var(--font-md)',
+          color: 'var(--color-text-secondary)',
+          lineHeight: 1.6,
+          marginBottom: 0
+        }}>
+          Designer-crafted objects made with precision. All items are ready to ship.
+        </p>
+      </div>
+
+      {/* Product Grid */}
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+        gap: 'var(--space-xl)',
+        width: '100%'
+      }}>
+        {products.map((product, index) => (
+          <ProductCard 
+            key={product.id} 
+            product={product} 
+            priority={index < 2}
+          />
         ))}
       </div>
     </div>

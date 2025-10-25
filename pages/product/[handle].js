@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 
@@ -22,10 +23,13 @@ export default function ProductPage({ product }) {
       <div style={{ display: 'flex', gap: 32, marginBottom: 24 }}>
         {product.image && (
           <div style={{ flex: '0 0 400px' }}>
-            <img 
+            <Image 
               src={product.image} 
-              alt={product.imageAlt || product.title} 
-              style={{ width: '100%', height: 400, objectFit: 'cover', borderRadius: 8 }} 
+              alt={product.imageAlt || product.title}
+              width={400}
+              height={400}
+              priority
+              style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 8 }} 
             />
           </div>
         )}

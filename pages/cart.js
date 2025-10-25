@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 export default function CartPage() {
@@ -42,10 +43,12 @@ export default function CartPage() {
               alignItems: 'center'
             }}>
               {image && (
-                <img 
+                <Image 
                   src={image} 
-                  alt={title} 
-                  style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 4 }} 
+                  alt={title}
+                  width={80}
+                  height={80}
+                  style={{ width: 80, height: 'auto', objectFit: 'cover', borderRadius: 4 }} 
                 />
               )}
               <div style={{ flex: 1 }}>

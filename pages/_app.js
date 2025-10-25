@@ -9,21 +9,79 @@ function Header() {
   const count = checkout?.lineItems?.edges?.reduce((s, e) => s + (e.node?.quantity || 0), 0) || 0;
   
   return (
-    <header style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem 2rem', borderBottom: '1px solid #eee' }}>
-      <div><Link href="/">My 3D Print Shop</Link></div>
-      <div>
+    <header style={{
+      position: 'sticky',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 'var(--header-height)',
+      backgroundColor: 'var(--color-bg)',
+      borderBottom: '1px solid var(--color-border-light)',
+      zIndex: 100,
+      backdropFilter: 'blur(8px)',
+      backgroundColor: 'rgba(255, 255, 255, 0.95)'
+    }}>
+      <div style={{
+        maxWidth: 'var(--max-width)',
+        margin: '0 auto',
+        height: '100%',
+        padding: '0 var(--space-xl)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        {/* Logo/Brand - Minimal wordmark */}
+        <Link href="/" style={{
+          fontSize: 'var(--font-base)',
+          fontWeight: 500,
+          color: 'var(--color-primary)',
+          letterSpacing: '-0.01em',
+          textTransform: 'uppercase',
+          transition: 'opacity var(--transition-fast)'
+        }}>
+          Print Studio
+        </Link>
+
+        {/* Cart Button - Understated */}
         <button 
           onClick={openCart}
           style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: 16,
-            color: '#0070f3',
-            textDecoration: 'underline'
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-xs)',
+            padding: 'var(--space-xs) var(--space-md)',
+            backgroundColor: 'transparent',
+            color: 'var(--color-text)',
+            fontSize: 'var(--font-sm)',
+            fontWeight: 400,
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--border-radius)',
+            transition: 'all var(--transition-fast)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--color-primary)';
+            e.currentTarget.style.backgroundColor = 'var(--color-bg-secondary)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--color-border)';
+            e.currentTarget.style.backgroundColor = 'transparent';
           }}
         >
-          Cart ({count})
+          <span>Cart</span>
+          {count > 0 && (
+            <span style={{
+              backgroundColor: 'var(--color-primary)',
+              color: '#fff',
+              padding: '1px 6px',
+              borderRadius: '10px',
+              fontSize: 'var(--font-xs)',
+              fontWeight: 500,
+              minWidth: '18px',
+              textAlign: 'center'
+            }}>
+              {count}
+            </span>
+          )}
         </button>
       </div>
     </header>
