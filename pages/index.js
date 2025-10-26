@@ -23,10 +23,9 @@ export default function Home({ products }) {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: 0,
-        marginBottom: 'var(--space-xl)',
-        borderTop: '1px solid var(--color-primary)',
+        marginBottom: 'var(--space-lg)',
         borderBottom: '1px solid var(--color-primary)',
-        minHeight: '400px'
+        minHeight: '407px'
       }}>
         {/* Left: Slogan */}
         <div style={{
@@ -78,6 +77,7 @@ export default function Home({ products }) {
                     src={product.image}
                     alt={product.imageAlt || product.title}
                     fill
+                    sizes="50vw"
                     style={{ objectFit: 'cover' }}
                     priority={index === 0}
                   />
@@ -183,7 +183,7 @@ export default function Home({ products }) {
         </div>
       </div>
 
-      <div className="container" style={{ paddingTop: 'var(--space-2xl)', paddingBottom: 'var(--space-2xl)' }}>
+      <div className="container" style={{ paddingTop: '0', paddingBottom: '0' }}>
 
       {/* Product Grid */}
       <div style={{ 
@@ -196,7 +196,7 @@ export default function Home({ products }) {
           <ProductCard 
             key={product.id} 
             product={product} 
-            priority={index < 2}
+            priority={false}
           />
         ))}
       </div>

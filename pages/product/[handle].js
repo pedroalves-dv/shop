@@ -12,9 +12,9 @@ export default function ProductPage({ product }) {
 
   if (!product) {
     return (
-      <div className="container" style={{ paddingTop: 'var(--space-2xl)' }}>
+      <div className="container" style={{ paddingTop: 'var(--space-xs)' }}>
         <p style={{ color: 'var(--color-text-secondary)' }}>Product not found</p>
-        <Link href="/" style={{ fontSize: 'var(--font-sm)', marginTop: 'var(--space-md)', display: 'inline-block' }}>
+        <Link href="/" style={{ fontSize: 'var(--font-sm)', marginTop: 'var(--space-xs)', display: 'inline-block' }}>
           ← Back to shop
         </Link>
       </div>
@@ -27,22 +27,23 @@ export default function ProductPage({ product }) {
 
   return (
     <div style={{ 
-      paddingTop: 'var(--space-2xl)', 
-      paddingBottom: 'var(--space-2xl)',
+      // paddingTop: 'var(--space-xs)', 
+      // paddingBottom: 'var(--space-2xl)',
       maxWidth: 'var(--max-width)',
       margin: '0 auto',
-      padding: '0 var(--space-xl)'
+      paddingLeft: 'var(--space-xs)',
+      paddingRight: 'var(--space-xs)'
     }}>
       {/* Product card - bordered nomenclature style */}
       <div style={{ 
         border: '1px solid var(--color-primary)',
         overflow: 'hidden',
-        marginTop: 'var(--space-2xl)'
+        marginTop: 'var(--space-xl)'
       }}>
         {/* Navigation section - full width at top */}
         <div style={{
           borderBottom: '1px solid var(--color-primary)',
-          padding: 'var(--space-xs) var(--space-lg)',
+          padding: 'var(--space-sm) var(--space-md)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -64,10 +65,11 @@ export default function ProductPage({ product }) {
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
               toast.success('Link copied!', {
+                id: 'link-copied',
                 duration: 2000,
                 style: {
                   fontSize: 'calc(var(--font-xs) * 0.85)',
-                  padding: 'calc(var(--space-xs) * 0.7) var(--space-sm)',
+                  padding: 'calc(var(--space-xs) * 0.7) var(--space-xs) var(--space-xs) var(--space-sm)',
                   minHeight: 'auto',
                   maxWidth: '200px'
                 }

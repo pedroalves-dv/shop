@@ -16,7 +16,7 @@ function Header() {
       right: 0,
       height: 'var(--header-height)',
       backgroundColor: 'var(--color-bg)',
-      borderBottom: '1px solid var(--color-border-light)',
+      borderBottom: '1px solid var(--color-primary)',
       zIndex: 100,
       backdropFilter: 'blur(8px)',
       backgroundColor: 'rgba(255, 255, 255, 0.95)'
@@ -25,7 +25,8 @@ function Header() {
         maxWidth: 'var(--max-width)',
         margin: '0 auto',
         height: '100%',
-        padding: '0 var(--space-xl)',
+        /* header left and right padding */
+        padding: '0 var(--space-xs)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -47,8 +48,8 @@ function Header() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 'var(--space-xs)',
-            padding: 'var(--space-xs) var(--space-md)',
+            gap: '0.5rem',
+            padding: '0.5rem 0.8rem',
             backgroundColor: 'transparent',
             color: 'var(--color-text)',
             fontSize: 'var(--font-sm)',
@@ -104,8 +105,8 @@ function CartContent({ Component, pageProps }) {
         position="top-right"
         containerStyle={{
           top: 'var(--header-height)',
-          right: 'calc(50% - var(--max-width) / 2 + var(--space-xl))',
-          marginTop: 'var(--space-md)'
+          right: 'calc(50% - var(--max-width) / 2 + var(--space-xs))',
+          marginTop: 'var(--space-sm)'
         }}
         toastOptions={{
           duration: 2000,

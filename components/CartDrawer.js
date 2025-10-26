@@ -82,18 +82,29 @@ export default function CartDrawer({ isOpen, onClose }) {
           padding: '20px'
         }}>
           {items.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-              <p style={{ color: '#666', marginBottom: 16 }}>Your cart is empty</p>
+            <div style={{ textAlign: 'center', padding: '20px 20px' }}>
+              <p style={{ color: '#666', marginBottom: 30 }}>Your cart is empty</p>
               <button 
                 onClick={onClose}
                 style={{
                   padding: '10px 20px',
-                  background: '#0070f3',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 6,
+                  background: '#fff',
+                  color: 'var(--color-primary)',
+                  border: '1px solid var(--color-primary)',
+                  borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  fontSize: 14
+                  fontSize: 'var(--font-sm)',
+                  fontWeight: 400,
+                  transition: 'all var(--transition-fast)',
+                  width: '100%'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#fff';
+                  e.currentTarget.style.color = 'var(--color-primary)';
                 }}
               >
                 Continue Shopping
@@ -179,8 +190,8 @@ export default function CartDrawer({ isOpen, onClose }) {
                         display: 'flex', 
                         alignItems: 'center', 
                         gap: 'var(--space-xs)',
-                        paddingTop: 'var(--space-xs)',
-                        marginTop: 'var(--space-xs)',
+                        paddingTop: 'var(--space-sm)',
+                        marginTop: 'var(--space-sm)',
                         borderTop: '1px solid var(--color-primary)',
                         marginLeft: 'calc(var(--space-sm) * -1)',
                         marginRight: 'calc(var(--space-sm) * -1)',
@@ -241,7 +252,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: 'var(--space-sm) var(--space-sm)',
-                        marginTop: 'var(--space-xs)',
+                        marginTop: 'var(--space-sm)',
                         borderTop: '1px solid var(--color-primary)',
                         marginLeft: 'calc(var(--space-sm) * -1)',
                         marginRight: 'calc(var(--space-sm) * -1)'
