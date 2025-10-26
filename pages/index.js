@@ -35,18 +35,20 @@ export default function Home({ products }) {
           justifyContent: 'center',
           alignItems: 'flex-start',
           backgroundColor: '#fff',
-          borderRight: '1px solid var(--color-primary)'
+          borderRight: '1px solid var(--color-primary)',
+          width: '100%'
         }}>
           <h1 style={{ 
-            fontSize: '4rem',
+            fontSize: '4.8rem',
             fontWeight: 600,
             letterSpacing: '-0.02em',
-            lineHeight: 1.2,
+            lineHeight: 1,
             textAlign: 'left',
             margin: 0,
-            maxWidth: '500px'
+            maxWidth: '500px',
+            width: '100%'
           }}>
-            Thoughtful and functional design.
+            Thoughtful <br /> and functional design.
           </h1>
         </div>
 
