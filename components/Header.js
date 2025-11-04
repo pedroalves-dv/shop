@@ -29,14 +29,50 @@ export default function Header() {
       }}>
         {/* Logo/Brand - Minimal wordmark */}
         <Link href="/" style={{
-          fontSize: 'var(--font-md)', // Slightly larger, scales with viewport
+          fontSize: 'var(--font-lg)', // Slightly larger, scales with viewport
           fontWeight: 500,
           color: 'var(--color-primary)',
-          letterSpacing: '-0.01em',
+        //   letterSpacing: '-0.01em',
           transition: 'opacity var(--transition-fast)'
         }}>
           Proto
         </Link>
+
+        {/* Navigation - Center */}
+        <nav style={{
+          display: 'flex',
+          gap: 'var(--space-xl)',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          width: '100%',
+          paddingLeft: 'var(--space-2xl)',
+          fontSize: 'var(--font-base)',
+          color: 'var(--color-text-primary)',
+          textDecoration: 'none',
+          transition: 'color var(--transition-fast)',
+        }}>
+          <Link 
+            href="/"
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+          >
+            Home
+          </Link>
+          <Link 
+            href="/products"
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+          >
+            All Products
+          </Link>
+          <Link 
+            href="/contact"
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+          >
+            Contact
+          </Link>
+        </nav>
 
         {/* Cart Button - Responsive sizing */}
         <button 

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
+import { redirect } from 'next/dist/server/api-utils';
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { checkout, loading, updateQuantity, removeFromCart, clearCart } = useCart();
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [removingItemId, setRemovingItemId] = useState(null);
 
   const items = checkout?.lineItems?.edges?.map(e => e.node) || [];
   const totalAmount = checkout?.cost?.totalAmount;
@@ -47,13 +47,13 @@ export default function CartDrawer({ isOpen, onClose }) {
         transition: 'transform 0.3s ease',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden'
+        // overflow: 'hidden'
       }}>
         {/* Header */}
         <div style={{
           height: 'var(--header-height)',
           padding: '0 20px 2px 20px',
-          borderBottom: '1px solid var(--color-primary)',
+          borderBottom: '1px solid var(--color-border)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center'
@@ -88,13 +88,13 @@ export default function CartDrawer({ isOpen, onClose }) {
               <button 
                 onClick={onClose}
                 style={{
-                  padding: '10px 20px',
+                  padding: '15px 20px',
                   background: '#fff',
                   color: 'var(--color-primary)',
                   border: '1px solid var(--color-primary)',
                   borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  fontSize: 'var(--font-sm)',
+                  fontSize: 'var(--font-base)',
                   fontWeight: 400,
                   transition: 'all var(--transition-fast)',
                   width: '100%'
@@ -102,10 +102,12 @@ export default function CartDrawer({ isOpen, onClose }) {
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'var(--color-primary)';
                   e.currentTarget.style.color = '#fff';
+                  e.currentTarget.style.border = '1px solid var(--color-primary)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = '#fff';
                   e.currentTarget.style.color = 'var(--color-primary)';
+                  e.currentTarget.style.border = '1px solid var(--color-primary)';
                 }}
               >
                 Continue Shopping
@@ -123,8 +125,8 @@ export default function CartDrawer({ isOpen, onClose }) {
                 return (
                   <div key={it.id} style={{
                     display: 'grid',
-                    gridTemplateColumns: '140px 1fr',
-                    border: '1px solid var(--color-primary)',
+                    gridTemplateColumns: '155px 1fr',
+                    border: '1px solid var(--color-border)',
                     borderRadius: 'var(--border-radius)',
                     overflow: 'hidden',
                     marginBottom: 'var(--space-md)',
@@ -133,12 +135,13 @@ export default function CartDrawer({ isOpen, onClose }) {
                     {/* Image Section */}
                     {image && (
                       <div style={{ 
-                        borderRight: '1px solid var(--color-primary)',
+                        borderRight: '1px solid var(--color-border)',
                         display: 'flex',
                         alignItems: 'stretch',
                         justifyContent: 'center',
                         backgroundColor: '#fafafa',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                       
                       }}>
                         <Image 
                           src={image} 
@@ -156,19 +159,22 @@ export default function CartDrawer({ isOpen, onClose }) {
                     
                     {/* Content Section */}
                     <div style={{ 
-                      paddingTop: 'var(--space-sm)',
-                      paddingLeft: 'var(--space-sm)',
-                      paddingRight: 'var(--space-sm)',
-                      paddingBottom: 0,
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'flex-start'
+                      justifyContent: 'flex-start',
+                      
                     }}>
                       {/* Top: Title & Price */}
-                      <div>
+                      <div style={{ 
+                          padding: 'var(--space-sm)',
+                          gap: 'var(--space-xs)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                       
+                        }}>
                         <h3 style={{ 
-                          margin: '0 0 4px 0', 
-                          fontSize: 'var(--font-sm)', 
+                          margin: '0',
+                          fontSize: 'var(--font-md)', 
                           fontWeight: 500,
                           color: 'var(--color-primary)',
                           overflow: 'hidden',
@@ -177,10 +183,10 @@ export default function CartDrawer({ isOpen, onClose }) {
                         }}>
                           {title}
                         </h3>
-                        <p style={{ 
+                        <p style={{  
                           margin: 0, 
                           color: 'var(--color-text-secondary)', 
-                          fontSize: 'var(--font-xs)'
+                          fontSize: 'var(--font-sm)'
                         }}>
                           {price} {currency}
                         </p>
@@ -188,35 +194,46 @@ export default function CartDrawer({ isOpen, onClose }) {
 
                       {/* Middle: Quantity Controls */}
                       <div style={{ 
+                        width: '100%',
                         display: 'flex', 
                         alignItems: 'center', 
                         gap: 'var(--space-xs)',
-                        paddingTop: 'var(--space-sm)',
-                        marginTop: 'var(--space-sm)',
-                        borderTop: '1px solid var(--color-primary)',
-                        marginLeft: 'calc(var(--space-sm) * -1)',
-                        marginRight: 'calc(var(--space-sm) * -1)',
-                        paddingLeft: 'var(--space-sm)',
-                        paddingRight: 'var(--space-sm)'
+                        padding: 'var(--space-sm)',
+                        borderTop: '1px solid var(--color-border)',
+                        
                       }}>
                         <button 
                           onClick={() => updateQuantity(it.id, Math.max(1, it.quantity - 1))} 
                           disabled={loading || it.quantity <= 1}
                           style={{ 
-                            padding: '4px 8px',
+                            
+                            width: 30,
+                            height: 30,
                             border: '1px solid var(--color-primary)',
                             borderRadius: 'var(--border-radius)',
                             background: it.quantity <= 1 ? 'var(--color-bg-secondary)' : '#fff',
                             cursor: it.quantity <= 1 ? 'not-allowed' : 'pointer',
                             fontSize: 'var(--font-sm)',
                             color: 'var(--color-primary)',
-                            lineHeight: 1,
+                            transition: 'all var(--transition-fast)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center'
                           }}
+                          onMouseEnter={(e) => {
+                            if (it.quantity > 1) {
+                              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                              e.currentTarget.style.color = '#fff';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (it.quantity > 1) {
+                              e.currentTarget.style.backgroundColor = '#fff';
+                              e.currentTarget.style.color = 'var(--color-primary)';
+                            }
+                          }}
                         >
-                          −
+                          –
                         </button>
                         <span style={{ 
                           minWidth: 30, 
@@ -230,17 +247,27 @@ export default function CartDrawer({ isOpen, onClose }) {
                           onClick={() => updateQuantity(it.id, it.quantity + 1)} 
                           disabled={loading}
                           style={{ 
-                            padding: '4px 8px',
+                            width: 30,
+                            height: 30,
                             border: '1px solid var(--color-primary)',
                             borderRadius: 'var(--border-radius)',
                             background: '#fff',
                             cursor: 'pointer',
                             fontSize: 'var(--font-sm)',
                             color: 'var(--color-primary)',
-                            lineHeight: 1,
+                            lineHeight: '3px',
+                            transition: 'all var(--transition-fast)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                            e.currentTarget.style.color = '#fff';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#fff';
+                            e.currentTarget.style.color = 'var(--color-primary)';
                           }}
                         >
                           +
@@ -249,86 +276,51 @@ export default function CartDrawer({ isOpen, onClose }) {
 
                       {/* Bottom: Total & Remove */}
                       <div style={{ 
+                        width: '100%',
                         display: 'flex', 
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        padding: 'var(--space-sm) var(--space-sm)',
-                        marginTop: 'var(--space-sm)',
-                        borderTop: '1px solid var(--color-primary)',
-                        marginLeft: 'calc(var(--space-sm) * -1)',
-                        marginRight: 'calc(var(--space-sm) * -1)'
+                        padding: 'var(--space-sm)',
+                        borderTop: '1px solid var(--color-border)',
                       }}>
                         <strong style={{ 
-                          fontSize: 'var(--font-sm)'
+                          fontSize: 'var(--font-md)',
                         }}>
                           {lineTotal} {currency}
                         </strong>
                         
-                        {removingItemId === it.id ? (
-                          <div style={{ 
-                            display: 'flex', 
-                            gap: 6, 
-                            alignItems: 'center'
-                          }}>
-                            <span style={{ fontSize: 'var(--font-xs)', color: 'var(--color-primary)' }}>Remove?</span>
-                            <button 
-                              onClick={() => {
-                                removeFromCart(it.id);
-                                setRemovingItemId(null);
-                              }}
-                              disabled={loading}
-                              style={{ 
-                                padding: '4px 8px',
-                                background: 'var(--color-primary)',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: 'var(--border-radius)',
-                                cursor: 'pointer',
-                                fontSize: 'var(--font-xs)',
-                                fontWeight: 500
-                              }}
-                            >
-                              Yes
-                            </button>
-                            <button 
-                              onClick={() => setRemovingItemId(null)}
-                              style={{ 
-                                padding: '4px 8px',
-                                background: '#fff',
-                                color: 'var(--color-primary)',
-                                border: '1px solid var(--color-primary)',
-                                borderRadius: 'var(--border-radius)',
-                                cursor: 'pointer',
-                                fontSize: 'var(--font-xs)'
-                              }}
-                            >
-                              No
-                            </button>
-                          </div>
-                        ) : (
-                          <button 
-                            onClick={() => setRemovingItemId(it.id)}
-                            disabled={loading}
-                            style={{ 
-                              padding: '4px 8px',
-                              background: 'none',
-                              color: 'var(--color-primary)',
-                              border: '1px solid var(--color-primary)',
-                              borderRadius: 'var(--border-radius)',
-                              cursor: 'pointer',
-                              fontSize: 14,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}
-                            title="Remove item"
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="3 6 5 6 21 6"></polyline>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                          </button>
-                        )}
+                        <button 
+                          onClick={() => removeFromCart(it.id)}
+                          disabled={loading}
+                          style={{ 
+                            width: 30,
+                            height: 30,
+                            background: 'none',
+                            color: 'var(--color-primary)',
+                            border: '1px solid var(--color-primary)',
+                            borderRadius: 'var(--border-radius)',
+                            cursor: 'pointer',
+                            fontSize: 14,
+                            transition: 'all var(--transition-fast)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                            e.currentTarget.style.color = '#fff';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                            e.currentTarget.style.color = 'var(--color-primary)';
+                          }}
+                          title="Remove item"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          </svg>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -418,24 +410,42 @@ export default function CartDrawer({ isOpen, onClose }) {
               href={checkout?.webUrl} 
               target="_blank" 
               rel="noreferrer"
-              style={{ textDecoration: 'none', display: 'block', marginBottom: 12 }}
+              style={{ 
+                textDecoration: 'none', 
+                display: 'block', 
+                marginBottom: 12,
+                opacity: 1
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = 1}
             >
-              <button style={{ 
-                width: '100%',
-                padding: '14px',
-                background: 'var(--color-primary)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 'var(--border-radius)',
-                cursor: 'pointer',
-                fontSize: 'var(--font-base)',
-                fontWeight: 500
-              }}>
+              <button 
+                style={{ 
+                  width: '100%',
+                  padding: '15px',
+                  background: 'var(--color-primary)',
+                  color: '#fff',
+                  border: '1px solid var(--color-primary)',
+                  borderRadius: 'var(--border-radius)',
+                  cursor: 'pointer',
+                  fontSize: 'var(--font-base)',
+                  fontWeight: 500,
+                  transition: 'all var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#54f391ff';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                  e.currentTarget.style.color = '#fff';
+                }}
+              >
                 Checkout
               </button>
             </a>
 
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 10 }}>
               <button 
                 onClick={onClose}
                 style={{ 
@@ -446,7 +456,16 @@ export default function CartDrawer({ isOpen, onClose }) {
                   border: '1px solid var(--color-primary)',
                   borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  fontSize: 'var(--font-sm)'
+                  fontSize: 'var(--font-sm)',
+                  transition: 'all var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#a591ffff';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#fff';
+                  e.currentTarget.style.color = 'var(--color-primary)';
                 }}
               >
                 Continue Shopping
@@ -461,7 +480,16 @@ export default function CartDrawer({ isOpen, onClose }) {
                   border: '1px solid var(--color-primary)',
                   borderRadius: 'var(--border-radius)',
                   cursor: 'pointer',
-                  fontSize: 'var(--font-sm)'
+                  fontSize: 'var(--font-sm)',
+                  transition: 'all var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ff9e9eff';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#fff';
+                  e.currentTarget.style.color = 'var(--color-primary)';
                 }}
               >
                 Clear Cart

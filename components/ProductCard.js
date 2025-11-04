@@ -35,27 +35,15 @@ export default function ProductCard({ product, priority = false }) {
       display: 'flex',
       flexDirection: 'column', // Stack children top to bottom
       height: '100%', // Take full height available
-      border: '1px solid var(--color-primary)', // Border using CSS custom property
-      // Remove top border when image is hovered - this reveals the card background
-      borderTop: isHovered ? 'none' : '1px solid var(--color-primary)',
+      border: '1px solid var(--color-border)', // Border using CSS custom property
+      // Make top and right borders transparent when image is hovered - keeps same size, hides borders
+      borderTop: isHovered ? '1px solid transparent' : '1px solid var(--color-border)',
       borderRadius: 'var(--border-radius)', // Rounded corners
       overflow: 'visible', // Allow 3D effect to extend beyond card
       backgroundColor: '#fff' // White background
     }}>
+  
       {/* Image Section - Creates a clickable product image with 3D hover effect */}
-      {/* 
-          VISUAL STRUCTURE:
-          
-          ┌─────────────────┐      
-          │                 │ ← LAYER 1: Main Image Box (zIndex: 3)
-          │  Product Photo  │   - Contains the actual image
-          │                 │   - Has white background
-          └─────────────────┘   - Moves up-left on hover
-                 │ └──────────  ← LAYER 3: Bottom Extrusion (zIndex: 2)
-                 └─────────────  ← LAYER 2: Right Extrusion (zIndex: 2)
-                 
-          The extrusions appear when you hover, creating a 3D "pop out" effect
-      */}
       <Link 
         href={`/product/${encodeURIComponent(product.handle ?? product.id)}`} // Navigate to product detail page
         style={{ opacity: 1 }} // Keep link fully visible
@@ -75,13 +63,13 @@ export default function ProductCard({ product, priority = false }) {
               overflow: 'visible', // Allow 3D shadows to show outside
               aspectRatio: '1 / 1', // Keep image square (width = height)
               cursor: 'pointer', // Show hand cursor on hover
-              borderBottom: '1px solid var(--color-primary)', // Separate from info section
+              borderBottom: '1px solid var(--color-border)', // Separate from info section
               // Move image up and left when hovered to create 3D effect
               transform: isHovered ? 'translate(-4px, -4px)' : 'translate(0, 0)',
               transition: 'transform var(--transition-fast)', // Smooth animation
               borderRadius: 'var(--border-radius) var(--border-radius) 0 0', // Rounded top corners only
               // Clip path controls what's visible - removes clipping on hover to show border
-              clipPath: isHovered ? 'none' : 'inset(0 0 0 0 round var(--border-radius) var(--border-radius) 0 0)'
+              // clipPath: isHovered ? 'none' : 'inset(0 0 0 0 round var(--border-radius) var(--border-radius) 0 0)'
             }}
             // Update hover state when mouse enters/leaves
             onMouseEnter={() => setIsHovered(true)}
@@ -100,15 +88,15 @@ export default function ProductCard({ product, priority = false }) {
               transition: 'border var(--transition-fast)', // Smooth border transition
               zIndex: 3, // Stack above the 3D shadow faces ← THIS IS THE MAIN IMAGE BOX
               marginBottom: '-1px', // Prevent double border with info section
-              borderRadius: '0 0 0 0', // Rounded top corners
+              borderRadius: '0', // Rounded top corners
               overflow: 'hidden' // Ensure image doesn't exceed rounded corners
             }}>
               {/* Next.js Image component - automatically optimizes images */}
               <Image 
                 src={product.image} // Image URL
                 alt={product.imageAlt || product.title} // Alt text for accessibility
-                width={240} // Original dimensions for optimization
-                height={240}
+                width={600} // Increased from 240 for better quality on all screen sizes
+                height={600}
                 priority={priority} // Load immediately if above the fold
                 style={{ 
                   width: '100%', 
@@ -147,7 +135,7 @@ export default function ProductCard({ product, priority = false }) {
               left: 0,
               width: '100%',
               height: '4px', // Thin horizontal strip
-              backgroundColor: 'var(--color-primary)', // Dark color for shadow effect
+              backgroundColor: 'var(--color-primary)',
               // Scale from 0 to full size on hover, skew creates 3D angle
               transform: isHovered ? 'skewX(45deg)' : 'scaleX(0)',
               transformOrigin: 'top left', // Anchor point for transform
@@ -166,7 +154,7 @@ export default function ProductCard({ product, priority = false }) {
         gap: '0.25rem', // Minimal space between title and price (4px)
         flex: 1, // Take up remaining space to push button to bottom
         padding: 'var(--space-sm)', // Inner spacing
-        borderBottom: '1px solid var(--color-primary)' // Separate from button section
+        borderBottom: '1px solid var(--color-border)' // Separate from button section
       }}>
         {/* Clickable product title - links to product detail page */}
         <Link href={`/product/${encodeURIComponent(product.handle ?? product.id)}`}>

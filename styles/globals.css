@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
+
 :root {
   /* Colors - Monochrome with subtle accent */
   --color-primary: #111;
   --color-primary-hover: #333;
+  --color-secondary: #999;
   --color-accent: #0070f3;
   --color-text: #1a1a1a;
   --color-text-secondary: #666;
@@ -9,7 +12,7 @@
   --color-border: #e5e5e5;
   --color-border-light: #f0f0f0;
   --color-bg: #ffffff;
-  --color-bg-secondary: #fafafa;
+  --color-bg-secondary: #f5f5f5;
   --color-error: #d32f2f;
   
   /* Responsive Breakpoints */
@@ -19,15 +22,16 @@
   --breakpoint-xl: 1280px;
   
   /* Spacing - Mobile-first (smaller base values) */
-  --space-xs: 5px;      /* 16px - increased from 0.1rem for better mobile spacing */
-  --space-sm: 0.75rem;   /* 12px */
+  --space-xxs: .02rem; 
+  --space-xs: 5px;      
+  --space-sm: 0.5rem;   /* 12px */
   --space-md: 1rem;      /* 16px */
   --space-lg: 1.5rem;    /* 24px */
   --space-xl: 2rem;      /* 32px */
   --space-2xl: 3rem;     /* 48px */
   
   /* Typography - Mobile-first (smaller base sizes) */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: "TikTok Sans", sans-serif;
   --font-xs: 0.75rem;    /* 12px */
   --font-sm: 0.875rem;   /* 14px */
   --font-base: 1rem;     /* 16px */
@@ -51,11 +55,18 @@
   --transition-base: 0.2s ease;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  letter-spacing: -0.02em;
+}
+
 /* Tablet and up (768px+) */
 @media (min-width: 768px) {
   :root {
     /* Increase spacing on larger screens */
-    --space-xs: 1rem;
+    --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;
     --space-lg: 1.5rem;
@@ -96,6 +107,20 @@
   :root {
     --grid-columns: 4;     /* 4 columns on large screens */
   }
+  
+  /* Contact page - 2 column layout on large screens */
+  .contact-content {
+    max-width: 1100px !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1.2fr !important;
+    gap: var(--space-2xl) !important;
+    align-items: start !important;
+  }
+  
+  .contact-intro {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+  }
 }
 
 * {
@@ -109,7 +134,8 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   /* Modern solution: reserve space only when content is scrollable */
-  scrollbar-gutter: stable;
+  /* scrollbar-gutter: stable; */
+  overflow-y: scroll;
 }
 
 body {
@@ -173,14 +199,6 @@ button {
   letter-spacing: -0.01em;
 }
 
-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
 button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -207,6 +225,13 @@ img {
   grid-template-columns: repeat(var(--grid-columns), 1fr);
   gap: var(--grid-gap);
   margin-bottom: var(--container-padding) !important;
+}
+
+/* Collections Grid - 2 columns max on desktop */
+@media (min-width: 1024px) {
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 /* Hide on mobile, show on desktop */
@@ -262,12 +287,11 @@ img {
 .product-page-container {
   padding-left: var(--container-padding) !important;
   padding-right: var(--container-padding) !important;
-  padding-bottom: var(--container-padding) !important;
 }
 
 .product-image {
   border-right: none !important;
-  border-bottom: 1px solid var(--color-primary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
 }
 
 /* Header - margin bottom only on mobile */
@@ -278,14 +302,15 @@ img {
 @media (min-width: 768px) {
   /* Restore product card margin on tablet+ */
   .product-card-wrapper {
-    margin-top: var(--space-xl) !important;
+    margin-top: var(--space-xs) !important;
   }
   
   /* Restore product page padding on tablet+ */
   .product-page-container {
+    padding-top: var(--space-lg) !important;
     padding-left: var(--space-xs) !important;
     padding-right: var(--space-xs) !important;
-    padding-bottom: var(--space-2xl) !important;
+    padding-bottom: var(--space-md) !important;
   }
   
   .footer-top {
@@ -315,18 +340,47 @@ img {
   }
   
   .product-image {
-    border-right: 1px solid var(--color-primary) !important;
+    border-right: 1px solid var(--color-border) !important;
     border-bottom: none !important;
   }
   
-  /* Remove header margin on tablet+ */
+  /* Header margin for desktop */
   .site-header {
-    margin-bottom: 0;
+    margin-bottom: var(--space-lg);
   }
 }
 
 @media (min-width: 768px) {
   :root {
     --font-2xl: 3rem;
+  }
+}
+
+/* Footer columns - Responsive grid */
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr; /* Stack on mobile */
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .footer-top {
+    grid-template-columns: auto auto auto auto; /* Each column takes space it needs */
+    gap: var(--space-2xl); /* Space between columns */
+    justify-content: flex-start; /* Align to left */
+  }
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .footer-links {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--space-lg);
   }
 }

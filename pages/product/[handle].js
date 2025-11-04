@@ -37,7 +37,6 @@ export default function ProductPage({ product }) {
 
   return (
     <div className="product-page-container" style={{ 
-      paddingBottom: 'var(--space-2xl)',
       maxWidth: 'var(--max-width)',
       margin: '0 auto',
       paddingLeft: 'var(--space-xs)',
@@ -45,13 +44,13 @@ export default function ProductPage({ product }) {
     }}>
       {/* Product card - bordered nomenclature style */}
       <div className="product-card-wrapper" style={{ 
-        border: '1px solid var(--color-primary)',
-        overflow: 'hidden',
-        marginTop: 'var(--space-xl)'
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--border-radius)',
+        overflow: 'hidden'
       }}>
         {/* Navigation section - full width at top */}
         <div style={{
-          borderBottom: '1px solid var(--color-primary)',
+          borderBottom: '1px solid var(--color-border)',
           padding: 'var(--space-sm) var(--space-md)',
           display: 'flex',
           alignItems: 'center',
@@ -126,8 +125,8 @@ export default function ProductPage({ product }) {
             <div className="product-image" style={{ 
               position: 'relative',
               width: '100%',
-              backgroundColor: 'var(--color-bg-secondary)',
-              borderBottom: '1px solid var(--color-primary)' // Bottom border on mobile
+              backgroundColor: 'var(--color-bg)',
+              borderBottom: '1px solid var(--color-border)' // Bottom border on mobile
             }}>
               {/* Main Image */}
               <div style={{
@@ -138,8 +137,8 @@ export default function ProductPage({ product }) {
                 <Image 
                   src={currentImage.url} 
                   alt={currentImage.altText || product.title}
-                  width={500}
-                  height={500}
+                  width={800}
+                  height={800}
                   priority
                   style={{ 
                     width: '100%', 
@@ -154,10 +153,10 @@ export default function ProductPage({ product }) {
               {images.length > 1 && (
                 <div style={{
                   display: 'flex',
-                  gap: 'var(--space-xs)',
+                  gap: 'var(--space-sm)',
                   padding: 'var(--space-sm)',
                   backgroundColor: 'var(--color-bg)',
-                  borderTop: '1px solid var(--color-primary)',
+                  borderTop: '1px solid var(--color-border)',
                   overflowX: 'auto'
                 }}>
                   {images.map((img, index) => (
@@ -170,11 +169,11 @@ export default function ProductPage({ product }) {
                         height: '60px',
                         flexShrink: 0,
                         border: currentImageIndex === index 
-                          ? '2px solid var(--color-primary)' 
+                          ? '1px solid var(--color-primary)' 
                           : '1px solid var(--color-border)',
                         padding: 0,
                         cursor: 'pointer',
-                        backgroundColor: 'var(--color-bg-secondary)',
+                        backgroundColor: 'var(--color-bg)',
                         opacity: currentImageIndex === index ? 1 : 0.6,
                         transition: 'all var(--transition-fast)'
                       }}
@@ -215,7 +214,7 @@ export default function ProductPage({ product }) {
           }}>
             {/* Title section */}
             <div style={{
-              borderBottom: '1px solid var(--color-primary)',
+              borderBottom: '1px solid var(--color-border)',
               padding: 'var(--space-lg)'
             }}>
               <h1 style={{ 
@@ -231,7 +230,7 @@ export default function ProductPage({ product }) {
 
           {/* Price section */}
           <div style={{
-            borderBottom: '1px solid var(--color-primary)',
+            borderBottom: '1px solid var(--color-border)',
             padding: 'var(--space-lg)'
           }}>
             <p style={{ 
@@ -247,7 +246,7 @@ export default function ProductPage({ product }) {
           {/* Action section */}
           <div style={{
             padding: 'var(--space-lg)',
-            borderBottom: '1px solid var(--color-primary)',
+            borderBottom: '1px solid var(--color-border)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start'
@@ -266,7 +265,7 @@ export default function ProductPage({ product }) {
                 fontWeight: 400,
                 backgroundColor: isOutOfStock ? '#f5f5f5' : 'var(--color-primary)',
                 color: isOutOfStock ? '#999' : '#fff',
-                border: isOutOfStock ? '1px solid #ccc' : 'none',
+                border: isOutOfStock ? '1px solid #ccc' : '1px solid var(--color-border)',
                 borderRadius: 'var(--border-radius)',
                 cursor: (loading || isOutOfStock) ? 'not-allowed' : 'pointer',
                 transition: 'all var(--transition-fast)',
@@ -285,7 +284,7 @@ export default function ProductPage({ product }) {
               if (!isOutOfStock) {
                 e.currentTarget.style.backgroundColor = 'var(--color-primary)';
                 e.currentTarget.style.color = '#fff';
-                e.currentTarget.style.border = 'none';
+         
               } else {
                 e.currentTarget.style.backgroundColor = '#f5f5f5';
                 e.currentTarget.style.color = '#999';
