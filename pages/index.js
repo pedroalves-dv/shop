@@ -34,10 +34,11 @@ export default function Home({ collections }) {
           width: '100%',
           marginBottom: 'var(--space-lg)',
         }}>
-          {collections.map((collection) => (
+          {collections.map((collection, index) => (
             <CollectionCard 
               key={collection.id} 
               collection={collection}
+              priority={index === 0}
             />
           ))}
         </div>

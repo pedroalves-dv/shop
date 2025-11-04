@@ -49,13 +49,14 @@ export default function ContactPage() {
     }}>
       {/* Contact Form Card */}
       <div className="product-card-wrapper" style={{ 
-        border: '1px solid var(--color-primary)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--border-radius)',
         overflow: 'hidden',
         marginTop: 'var(--space-xl)'
       }}>
         {/* Header section */}
         <div style={{
-          borderBottom: '1px solid var(--color-primary)',
+          borderBottom: '1px solid var(--color-border)',
           padding: 'var(--space-sm) var(--space-md)',
           display: 'flex',
           alignItems: 'center',

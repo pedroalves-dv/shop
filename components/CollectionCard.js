@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 
-export default function CollectionCard({ collection }) {
+export default function CollectionCard({ collection, priority = false }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -62,7 +62,7 @@ export default function CollectionCard({ collection }) {
                   height: '100%'
                 }}
                 quality={95}
-                priority={false}
+                priority={priority}
                 unoptimized={true}
               />
             ) : (
