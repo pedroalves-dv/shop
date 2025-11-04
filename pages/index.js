@@ -18,9 +18,9 @@ export default function Home({ products }) {
 
   return (
     <>
-      {/* Hero Banner - Full Width Split Layout */}
-      <div style={{ 
-        display: 'grid',
+      {/* Hero Banner - Hidden on mobile, shown on tablet+ */}
+      <div className="hero-banner" style={{ 
+        display: 'none', // Hidden on mobile
         gridTemplateColumns: '1fr 1fr',
         gap: 0,
         marginBottom: 'var(--space-lg)',
@@ -187,12 +187,10 @@ export default function Home({ products }) {
 
       <div className="container" style={{ paddingTop: '0', paddingBottom: '0' }}>
 
-      {/* Product Grid */}
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-        gap: 'var(--space-xl)',
-        width: '100%'
+      {/* Product Grid - Responsive: 1 col mobile, 2 tablet, 3 desktop, 4 large */}
+      <div className="responsive-grid" style={{ 
+        width: '100%',
+        marginBottom: 'var(--space-lg)',
       }}>
         {products.map((product, index) => (
           <ProductCard 
@@ -235,6 +233,8 @@ const query = `
                 amount
                 currencyCode
               }
+              availableForSale
+              quantityAvailable
             }
           }
         }
@@ -262,7 +262,9 @@ const products = response.data.data.products.edges.map(edge => ({
   variants: edge.node.variants.edges.map(v => ({
     id: v.node.id,
     price: v.node.priceV2.amount,
-    currency: v.node.priceV2.currencyCode
+    currency: v.node.priceV2.currencyCode,
+    availableForSale: v.node.availableForSale,
+    quantityAvailable: v.node.quantityAvailable
   }))
 }));
 

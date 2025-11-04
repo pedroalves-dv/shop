@@ -51,7 +51,8 @@ export default function CartDrawer({ isOpen, onClose }) {
       }}>
         {/* Header */}
         <div style={{
-          padding: '20px',
+          height: 'var(--header-height)',
+          padding: '0 20px 2px 20px',
           borderBottom: '1px solid var(--color-primary)',
           display: 'flex',
           justifyContent: 'space-between',
@@ -71,7 +72,7 @@ export default function CartDrawer({ isOpen, onClose }) {
               lineHeight: 1
             }}
           >
-            ×
+            ✖
           </button>
         </div>
 

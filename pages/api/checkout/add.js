@@ -65,6 +65,16 @@ export default async function handler(req, res) {
 
       if (response.data.errors) {
         console.error('Shopify GraphQL errors (create in add):', response.data.errors);
+        
+        // Check if it's a throttling error
+        const isThrottled = response.data.errors.some(err => err.extensions?.code === 'THROTTLED');
+        if (isThrottled) {
+          return res.status(429).json({ 
+            error: 'Too many requests. Please wait a moment and try again.',
+            code: 'THROTTLED' 
+          });
+        }
+        
         return res.status(500).json({ error: response.data.errors });
       }
 
@@ -160,6 +170,18 @@ export default async function handler(req, res) {
 
     if (response.data.errors) {
       console.error('Shopify GraphQL errors (add lines):', response.data.errors);
+      
+      // Check if it's a throttling error
+      const isThrottled = response.data.errors.some(err => err.extensions?.code === 'THROTTLED');
+      if (isThrottled) {
+        // Tell frontend to clear cart and retry
+        return res.status(410).json({ 
+          error: 'Cart expired. Please try again.',
+          code: 'CART_EXPIRED',
+          clearCart: true
+        });
+      }
+      
       return res.status(500).json({ error: response.data.errors });
     }
 
@@ -185,8 +207,21 @@ export default async function handler(req, res) {
       }
     });
   } catch (err) {
-    console.error('API /checkout/add error', err && err.message ? err.message : err, err?.response?.data || '');
-    const message = err?.response?.data || err?.message || 'unknown error';
-    return res.status(500).json({ error: message });
+    console.error('❌❌❌ API /checkout/add FATAL ERROR ❌❌❌');
+    console.error('Error message:', err.message);
+    console.error('Error response data:', JSON.stringify(err?.response?.data, null, 2));
+    console.error('Full error:', err);
+    
+    const shopifyError = err?.response?.data?.errors || err?.response?.data;
+    const message = shopifyError || err?.message || 'Unknown error occurred while adding to cart';
+    
+    return res.status(500).json({ 
+      error: 'Unable to add item to cart', 
+      details: typeof message === 'string' ? message : JSON.stringify(message),
+      debug: {
+        message: err.message,
+        responseData: err?.response?.data
+      }
+    });
   }
 }

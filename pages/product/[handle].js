@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -6,9 +7,10 @@ import { useCart } from '../../context/CartContext';
 import toast from 'react-hot-toast';
 
 export default function ProductPage({ product }) {
-  const { addToCart } = useCart();
-  const [adding, setAdding] = useState(false);
+  const router = useRouter();
+  const { addToCart, loading } = useCart();
   const [added, setAdded] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (!product) {
     return (
@@ -25,17 +27,24 @@ export default function ProductPage({ product }) {
     ? `${product.variants[0].price} ${product.variants[0].currency}`
     : 'N/A';
 
+  // Check if product is out of stock
+  const firstVariant = product?.variants?.[0];
+  const isOutOfStock = !firstVariant?.availableForSale || firstVariant?.quantityAvailable === 0;
+
+  // Get images array (fallback to single image for backwards compatibility)
+  const images = product.images?.length > 0 ? product.images : (product.image ? [{url: product.image, altText: product.imageAlt}] : []);
+  const currentImage = images[currentImageIndex];
+
   return (
-    <div style={{ 
-      // paddingTop: 'var(--space-xs)', 
-      // paddingBottom: 'var(--space-2xl)',
+    <div className="product-page-container" style={{ 
+      paddingBottom: 'var(--space-2xl)',
       maxWidth: 'var(--max-width)',
       margin: '0 auto',
       paddingLeft: 'var(--space-xs)',
       paddingRight: 'var(--space-xs)'
     }}>
       {/* Product card - bordered nomenclature style */}
-      <div style={{ 
+      <div className="product-card-wrapper" style={{ 
         border: '1px solid var(--color-primary)',
         overflow: 'hidden',
         marginTop: 'var(--space-xl)'
@@ -48,18 +57,28 @@ export default function ProductPage({ product }) {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <Link 
-            href="/" 
+          <button
+            onClick={() => router.push('/')}
             style={{ 
               fontSize: 'var(--font-xs)',
               color: 'var(--color-text-muted)',
               display: 'inline-block',
               transition: 'color var(--transition-fast)',
-              letterSpacing: '0.05em'
+              letterSpacing: '0.05em',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text-muted)';
             }}
           >
             ← Shop
-          </Link>
+          </button>
           
           <button
             onClick={() => {
@@ -69,9 +88,10 @@ export default function ProductPage({ product }) {
                 duration: 2000,
                 style: {
                   fontSize: 'calc(var(--font-xs) * 0.85)',
-                  padding: 'calc(var(--space-xs) * 0.7) var(--space-xs) var(--space-xs) var(--space-sm)',
+                  // padding: 'calc(var(--space-xs) * 0.7) var(--space-xs) var(--space-xs) var(--space-sm)',
                   minHeight: 'auto',
-                  maxWidth: '200px'
+                  maxWidth: '200px',
+                  height: 'calc(var(--header-height) - 13px)',
                 }
               });
             }}
@@ -96,33 +116,95 @@ export default function ProductPage({ product }) {
           </button>
         </div>
 
-        {/* Main content - image and info side by side */}
-        <div style={{
+        {/* Main content - Stack on mobile, side by side on tablet+ */}
+        <div className="product-layout" style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr'
+          gridTemplateColumns: '1fr' // Stack on mobile
         }}>
-          {/* Image - Left side */}
-          {product.image && (
-            <div style={{ 
+          {/* Image Gallery - Left side (top on mobile) */}
+          {images.length > 0 && (
+            <div className="product-image" style={{ 
               position: 'relative',
               width: '100%',
               backgroundColor: 'var(--color-bg-secondary)',
-              aspectRatio: '1 / 1',
-              borderRight: '1px solid var(--color-primary)'
+              borderBottom: '1px solid var(--color-primary)' // Bottom border on mobile
             }}>
-              <Image 
-                src={product.image} 
-                alt={product.imageAlt || product.title}
-                width={500}
-                height={500}
-                priority
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  objectFit: 'cover',
-                  display: 'block'
-                }} 
-              />
+              {/* Main Image */}
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '1 / 1'
+              }}>
+                <Image 
+                  src={currentImage.url} 
+                  alt={currentImage.altText || product.title}
+                  width={500}
+                  height={500}
+                  priority
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover',
+                    display: 'block'
+                  }} 
+                />
+              </div>
+
+              {/* Thumbnail Navigation - Only show if multiple images */}
+              {images.length > 1 && (
+                <div style={{
+                  display: 'flex',
+                  gap: 'var(--space-xs)',
+                  padding: 'var(--space-sm)',
+                  backgroundColor: 'var(--color-bg)',
+                  borderTop: '1px solid var(--color-primary)',
+                  overflowX: 'auto'
+                }}>
+                  {images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      style={{
+                        position: 'relative',
+                        width: '60px',
+                        height: '60px',
+                        flexShrink: 0,
+                        border: currentImageIndex === index 
+                          ? '2px solid var(--color-primary)' 
+                          : '1px solid var(--color-border)',
+                        padding: 0,
+                        cursor: 'pointer',
+                        backgroundColor: 'var(--color-bg-secondary)',
+                        opacity: currentImageIndex === index ? 1 : 0.6,
+                        transition: 'all var(--transition-fast)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (currentImageIndex !== index) {
+                          e.currentTarget.style.opacity = '0.8';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (currentImageIndex !== index) {
+                          e.currentTarget.style.opacity = '0.6';
+                        }
+                      }}
+                    >
+                      <Image 
+                        src={img.url} 
+                        alt={img.altText || `${product.title} - Image ${index + 1}`}
+                        width={60}
+                        height={60}
+                        style={{ 
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'cover',
+                          display: 'block'
+                        }} 
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -165,46 +247,53 @@ export default function ProductPage({ product }) {
           {/* Action section */}
           <div style={{
             padding: 'var(--space-lg)',
-            flex: 1,
+            borderBottom: '1px solid var(--color-primary)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start'
           }}>
             <button
               onClick={async () => {
+                if (isOutOfStock) return; // Don't add if out of stock
                 if (!product.variants || product.variants.length === 0) return;
-                setAdding(true);
                 const res = await addToCart(product.variants[0].id, 1);
                 if (res) setAdded(true);
-                setAdding(false);
               }}
-              disabled={adding}
+              disabled={loading || isOutOfStock}
               style={{ 
                 padding: 'var(--space-md) var(--space-2xl)',
                 fontSize: 'var(--font-base)',
                 fontWeight: 400,
-                backgroundColor: 'var(--color-primary)',
-                color: '#fff',
-                border: 'none',
+                backgroundColor: isOutOfStock ? '#f5f5f5' : 'var(--color-primary)',
+                color: isOutOfStock ? '#999' : '#fff',
+                border: isOutOfStock ? '1px solid #ccc' : 'none',
                 borderRadius: 'var(--border-radius)',
-                cursor: adding ? 'not-allowed' : 'pointer',
+                cursor: (loading || isOutOfStock) ? 'not-allowed' : 'pointer',
                 transition: 'all var(--transition-fast)',
-                width: '100%'
+                width: '100%',
+                transform: 'none',
+                opacity: isOutOfStock ? 0.6 : 1
               }}
             onMouseEnter={(e) => {
-              if (!adding) {
+              if (!loading && !isOutOfStock) {
                 e.currentTarget.style.backgroundColor = '#fff';
                 e.currentTarget.style.color = 'var(--color-primary)';
                 e.currentTarget.style.border = '1px solid var(--color-primary)';
               }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
-              e.currentTarget.style.color = '#fff';
-              e.currentTarget.style.border = 'none';
+              if (!isOutOfStock) {
+                e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                e.currentTarget.style.color = '#fff';
+                e.currentTarget.style.border = 'none';
+              } else {
+                e.currentTarget.style.backgroundColor = '#f5f5f5';
+                e.currentTarget.style.color = '#999';
+                e.currentTarget.style.border = '1px solid #ccc';
+              }
             }}
           >
-            {adding ? 'Adding…' : 'Add to Cart'}
+            {isOutOfStock ? 'Out of Stock' : (loading ? 'Adding…' : 'Add to Cart')}
           </button>
 
           {/* Success message */}
@@ -218,6 +307,34 @@ export default function ProductPage({ product }) {
             </p>
           )}
           </div>
+
+          {/* Description section */}
+          {product.description && (
+            <div style={{
+              padding: 'var(--space-lg)'
+            }}>
+              <h2 style={{
+                fontSize: 'var(--font-sm)',
+                fontWeight: 500,
+                color: 'var(--color-primary)',
+                marginBottom: 'var(--space-sm)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Description
+              </h2>
+              <p style={{ 
+                fontSize: 'var(--font-sm)',
+                color: 'var(--color-text-secondary)',
+                margin: 0,
+                lineHeight: 1.6,
+                fontWeight: 400,
+                whiteSpace: 'pre-line'
+              }}>
+                {product.description}
+              </p>
+            </div>
+          )}
         </div>
         </div>
       </div>
@@ -270,7 +387,9 @@ export async function getStaticProps({ params }) {
       id
       title
       handle
-      images(first: 1) {
+      description
+      descriptionHtml
+      images(first: 10) {
         edges {
           node {
             url
@@ -286,6 +405,8 @@ export async function getStaticProps({ params }) {
               amount
               currencyCode
             }
+            availableForSale
+            quantityAvailable
           }
         }
       }
@@ -310,12 +431,20 @@ export async function getStaticProps({ params }) {
       id: productNode.id,
       title: productNode.title,
       handle: productNode.handle,
+      description: productNode.description || '',
+      descriptionHtml: productNode.descriptionHtml || '',
       image: productNode.images?.edges?.[0]?.node?.url || null,
       imageAlt: productNode.images?.edges?.[0]?.node?.altText || productNode.title,
+      images: productNode.images?.edges?.map(edge => ({
+        url: edge.node.url,
+        altText: edge.node.altText || productNode.title
+      })) || [],
       variants: productNode.variants.edges.map(v => ({
         id: v.node.id,
         price: v.node.priceV2.amount,
-        currency: v.node.priceV2.currencyCode
+        currency: v.node.priceV2.currencyCode,
+        availableForSale: v.node.availableForSale,
+        quantityAvailable: v.node.quantityAvailable
       }))
     };
 

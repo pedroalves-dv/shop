@@ -116,6 +116,20 @@ export default async function handler(req, res) {
     return res.status(200).json({ checkout });
   } catch (error) {
     console.error('Update quantity error:', error.response?.data || error.message);
-    return res.status(500).json({ error: 'Failed to update quantity', details: error.message });
+    
+    // Log more details for debugging
+    if (error.response?.data?.errors) {
+      console.error('Shopify errors:', JSON.stringify(error.response.data.errors, null, 2));
+    }
+    
+    // Provide more helpful error message
+    const errorMessage = error.response?.data?.errors?.[0]?.message 
+      || error.response?.data?.message 
+      || 'Failed to update quantity. Item may be out of stock or unavailable.';
+    
+    return res.status(500).json({ 
+      error: errorMessage,
+      details: error.response?.data || error.message 
+    });
   }
 }

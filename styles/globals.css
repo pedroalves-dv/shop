@@ -12,32 +12,90 @@
   --color-bg-secondary: #fafafa;
   --color-error: #d32f2f;
   
-  /* Spacing - More generous for breathing room */
-  --space-xs: 0.1rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2.5rem;
-  --space-2xl: 4rem;
+  /* Responsive Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
   
-  /* Typography - Clean, readable hierarchy */
+  /* Spacing - Mobile-first (smaller base values) */
+  --space-xs: 5px;      /* 16px - increased from 0.1rem for better mobile spacing */
+  --space-sm: 0.75rem;   /* 12px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  
+  /* Typography - Mobile-first (smaller base sizes) */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-xs: 0.75rem;
-  --font-sm: 0.875rem;
-  --font-base: 1rem;
-  --font-md: 1.125rem;
-  --font-lg: 1.5rem;
-  --font-xl: 2rem;
-  --font-2xl: 2.5rem;
+  --font-xs: 0.75rem;    /* 12px */
+  --font-sm: 0.875rem;   /* 14px */
+  --font-base: 1rem;     /* 16px */
+  --font-md: 1.125rem;   /* 18px */
+  --font-lg: 1.25rem;    /* 20px - smaller on mobile */
+  --font-xl: 1.5rem;     /* 24px - smaller on mobile */
+  --font-2xl: 2rem;      /* 32px - smaller on mobile */
   
-  /* Layout */
+  /* Layout - Mobile-first */
   --max-width: 1280px;
+  --container-padding: 1rem;  /* Mobile padding */
   --border-radius: 2px;
   --header-height: 56px;
+  
+  /* Grid - Responsive columns */
+  --grid-columns: 1;     /* 1 column on mobile */
+  --grid-gap: 1rem;
   
   /* Transitions - Fast and snappy */
   --transition-fast: 0.15s ease;
   --transition-base: 0.2s ease;
+}
+
+/* Tablet and up (768px+) */
+@media (min-width: 768px) {
+  :root {
+    /* Increase spacing on larger screens */
+    --space-xs: 1rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2.5rem;
+    --space-2xl: 4rem;
+    
+    /* Increase font sizes */
+    --font-lg: 1.5rem;     /* 24px */
+    --font-xl: 2rem;       /* 32px */
+    --font-2xl: 2.5rem;    /* 40px */
+    
+    /* More columns on tablet */
+    --grid-columns: 2;
+    --grid-gap: 1.5rem;
+    
+    /* Increase container padding */
+    --container-padding: 1.5rem;
+  }
+}
+
+/* Desktop and up (1024px+) */
+@media (min-width: 1024px) {
+  :root {
+    /* Even more spacing */
+    --space-2xl: 5rem;
+    
+    /* Larger fonts for desktop */
+    --font-2xl: 3rem;      /* 48px */
+    
+    /* More columns on desktop */
+    --grid-columns: 3;
+    --grid-gap: 2rem;
+  }
+}
+
+/* Large desktop (1280px+) */
+@media (min-width: 1280px) {
+  :root {
+    --grid-columns: 4;     /* 4 columns on large screens */
+  }
 }
 
 * {
@@ -50,6 +108,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Modern solution: reserve space only when content is scrollable */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -59,7 +119,7 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%));
+
 }
 
 /* Typography - Minimal, functional */
@@ -137,7 +197,132 @@ img {
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-xs);
+  padding: 0 var(--container-padding);
+  width: 100%;
+}
+
+/* Responsive Grid Utility */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gap);
+  margin-bottom: var(--container-padding) !important;
+}
+
+/* Hide on mobile, show on desktop */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+  
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* Show on mobile, hide on desktop */
+.hide-desktop {
+  display: block;
+}
+
+/* Footer responsive layout */
+.footer-top {
+  grid-template-columns: 1fr !important; /* Stack on mobile */
+}
+
+.footer-links {
+  flex-direction: column !important; /* Stack link columns on mobile */
+}
+
+.footer-bottom {
+  flex-direction: column !important;
+  text-align: center !important;
+}
+
+/* Hero banner - hidden on mobile */
+.hero-banner {
+  display: none !important;
+}
+
+/* Product page layout - stack on mobile */
+.product-layout {
+  grid-template-columns: 1fr !important;
+}
+
+/* Product page card wrapper - no top margin on mobile */
+.product-card-wrapper {
+  margin-top: 0 !important;
+}
+
+/* Product page container - match homepage padding on mobile */
+.product-page-container {
+  padding-left: var(--container-padding) !important;
+  padding-right: var(--container-padding) !important;
+  padding-bottom: var(--container-padding) !important;
+}
+
+.product-image {
+  border-right: none !important;
+  border-bottom: 1px solid var(--color-primary) !important;
+}
+
+/* Header - margin bottom only on mobile */
+.site-header {
+  margin-bottom: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  /* Restore product card margin on tablet+ */
+  .product-card-wrapper {
+    margin-top: var(--space-xl) !important;
+  }
+  
+  /* Restore product page padding on tablet+ */
+  .product-page-container {
+    padding-left: var(--space-xs) !important;
+    padding-right: var(--space-xs) !important;
+    padding-bottom: var(--space-2xl) !important;
+  }
+  
+  .footer-top {
+    grid-template-columns: 1fr 1fr !important; /* Side by side on tablet+ */
+  }
+  
+  .footer-links {
+    flex-direction: row !important; /* Side by side on tablet+ */
+    justify-content: flex-end !important;
+    gap: var(--space-2xl) !important;
+  }
+  
+  .footer-bottom {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    text-align: left !important;
+  }
+  
+  /* Show hero on tablet+ */
+  .hero-banner {
+    display: grid !important;
+  }
+  
+  /* Product page - side by side on tablet+ */
+  .product-layout {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .product-image {
+    border-right: 1px solid var(--color-primary) !important;
+    border-bottom: none !important;
+  }
+  
+  /* Remove header margin on tablet+ */
+  .site-header {
+    margin-bottom: 0;
+  }
 }
 
 @media (min-width: 768px) {
