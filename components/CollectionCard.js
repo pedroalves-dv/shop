@@ -54,9 +54,16 @@ export default function CollectionCard({ collection }) {
               <Image
                 src={collection.image}
                 alt={collection.imageAlt || collection.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                style={{ objectFit: 'cover' }}
+                width={1200}
+                height={900}
+                style={{ 
+                  objectFit: 'cover',
+                  width: '100%',
+                  height: '100%'
+                }}
+                quality={95}
+                priority={false}
+                unoptimized={true}
               />
             ) : (
               <div style={{

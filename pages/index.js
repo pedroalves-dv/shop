@@ -84,15 +84,25 @@ export async function getStaticProps() {
 
   console.log(JSON.stringify(response.data, null, 2));
 
-  const collections = response.data.data.collections.edges.map(edge => ({
-    id: edge.node.id,
-    handle: edge.node.handle,
-    title: edge.node.title,
-    description: edge.node.description,
-    image: edge.node.image?.url || null,
-    imageAlt: edge.node.image?.altText || edge.node.title,
-    productCount: edge.node.products.edges.length
-  }));
+  const collections = response.data.data.collections.edges.map(edge => {
+    let imageUrl = edge.node.image?.url || null;
+    // Append Shopify image transformation for better quality (2x for retina)
+    if (imageUrl) {
+      imageUrl = imageUrl.includes('?') 
+        ? `${imageUrl}&width=1200` 
+        : `${imageUrl}?width=1200`;
+    }
+    
+    return {
+      id: edge.node.id,
+      handle: edge.node.handle,
+      title: edge.node.title,
+      description: edge.node.description,
+      image: imageUrl,
+      imageAlt: edge.node.image?.altText || edge.node.title,
+      productCount: edge.node.products.edges.length
+    };
+  });
 
   return { props: { collections } };
 }
