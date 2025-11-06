@@ -35,7 +35,7 @@ export default function Header() {
         //   letterSpacing: '-0.01em',
           transition: 'opacity var(--transition-fast)'
         }}>
-          Proto
+          Prototype
         </Link>
 
         {/* Navigation - Center */}

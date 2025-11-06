@@ -32,7 +32,7 @@ export default function Footer() {
               textDecoration: 'none',
               
             }}>
-              Proto
+              Prototype
             </Link>
             <p style={{
               marginTop: 'var(--space-xs)',
@@ -278,7 +278,7 @@ export default function Footer() {
             color: 'var(--color-text-muted)',
             margin: 0
           }}>
-            © {currentYear} Proto. All rights reserved.
+            © {currentYear} Prototype. All rights reserved.
           </p>
           
           <p style={{
