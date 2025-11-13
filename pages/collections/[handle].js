@@ -4,56 +4,27 @@ import ProductCard from '../../components/ProductCard';
 export default function Collection({ collection }) {
   if (!collection) {
     return (
-      <div style={{
-        maxWidth: 'var(--max-width)',
-        margin: '0 auto',
-        padding: 'var(--space-xl) var(--container-padding)',
-        textAlign: 'center'
-      }}>
-        <h1>Collection not found</h1>
+      <div className="collection-page">
+        <div className="collection-header" style={{ textAlign: 'center' }}>
+          <h1>Collection not found</h1>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{
-      maxWidth: 'var(--max-width)',
-      margin: '0 auto',
-      paddingTop: 'var(--space-xl)',
-      paddingLeft: 'var(--container-padding)',
-      paddingRight: 'var(--container-padding)'
-    }}>
+    <div className="collection-page">
       {/* Collection Header */}
-      <div style={{
-        marginBottom: 'var(--space-xl)',
-        textAlign: 'start',
-      }}>
-        <h1 style={{
-          fontSize: 'var(--font-2xl)',
-          fontWeight: 600,
-          letterSpacing: '-0.02em',
-          marginBottom: 'var(--space-sm)',
-          color: 'var(--color-text)'
-        }}>
-          {collection.title}
-        </h1>
+      <div className="collection-header">
+        <h1 className="collection-title">{collection.title}</h1>
         {collection.description && (
-          <p style={{
-            fontSize: 'var(--font-md)',
-            color: 'var(--color-text-muted)',
-            maxWidth: '600px',
-          }}>
-            {collection.description}
-          </p>
+          <p className="collection-subtitle">{collection.description}</p>
         )}
       </div>
 
       {/* Products Grid */}
       {collection.products.length > 0 ? (
-        <div className="responsive-grid" style={{ 
-          width: '100%',
-          marginBottom: 'var(--space-lg)',
-        }}>
+        <div className="responsive-grid collections-grid">
           {collection.products.map((product) => (
             <ProductCard 
               key={product.id} 
@@ -63,11 +34,7 @@ export default function Collection({ collection }) {
           ))}
         </div>
       ) : (
-        <div style={{
-          textAlign: 'center',
-          padding: 'var(--space-2xl)',
-          color: 'var(--color-text-muted)'
-        }}>
+        <div className="collection-empty">
           <p>No products in this collection yet.</p>
         </div>
       )}

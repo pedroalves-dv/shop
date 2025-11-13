@@ -41,19 +41,9 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="product-page-container" style={{ 
-      maxWidth: 'var(--max-width)',
-      margin: '0 auto',
-      paddingLeft: 'var(--space-xs)',
-      paddingRight: 'var(--space-xs)'
-    }}>
+    <div className="container product-page-container">
       {/* Contact Form Card */}
-      <div className="product-card-wrapper" style={{ 
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--border-radius)',
-        overflow: 'hidden',
-        marginTop: 'var(--space-xl)'
-      }}>
+      <div className="product-card product-card--spaced">
         {/* Header section */}
         <div style={{
           borderBottom: '1px solid var(--color-border)',

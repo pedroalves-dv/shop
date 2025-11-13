@@ -3,41 +3,15 @@ import ProductCard from '../components/ProductCard';
 
 export default function Products({ products }) {
   return (
-    <div style={{
-      maxWidth: 'var(--max-width)',
-      margin: '0 auto',
-      paddingTop: 'var(--space-xl)',
-      paddingLeft: 'var(--container-padding)',
-      paddingRight: 'var(--container-padding)'
-    }}>
+    <div className="products-page">
       {/* Page Header */}
-      <div style={{
-        marginBottom: 'var(--space-xl)',
-        textAlign: 'start',
-      }}>
-        <h1 style={{
-          fontSize: 'var(--font-2xl)',
-          fontWeight: 600,
-          letterSpacing: '-0.02em',
-          marginBottom: 'var(--space-sm)',
-          color: 'var(--color-text)'
-        }}>
-          All Products
-        </h1>
-        <p style={{
-          fontSize: 'var(--font-md)',
-          color: 'var(--color-text-muted)',
-          maxWidth: '600px',
-        }}>
-          Explore our full collection of thoughtfully designed products.
-        </p>
+      <div className="products-header">
+        <h1 className="products-title">All Products</h1>
+        <p className="products-subtitle">Explore our full collection of thoughtfully designed products.</p>
       </div>
 
       {/* Product Grid */}
-      <div className="responsive-grid" style={{ 
-        width: '100%',
-        marginBottom: 'var(--space-lg)',
-      }}>
+      <div className="responsive-grid products-grid">
         {products.map((product) => (
           <ProductCard 
             key={product.id} 

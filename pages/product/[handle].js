@@ -36,49 +36,18 @@ export default function ProductPage({ product }) {
   const currentImage = images[currentImageIndex];
 
   return (
-    <div className="product-page-container" style={{ 
-      maxWidth: 'var(--max-width)',
-      margin: '0 auto',
-      paddingLeft: 'var(--space-xs)',
-      paddingRight: 'var(--space-xs)'
-    }}>
+    <div className="container product-page-container">
       {/* Product card - bordered nomenclature style */}
-      <div className="product-card-wrapper" style={{ 
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--border-radius)',
-        overflow: 'hidden'
-      }}>
+      <div className="product-card">
         {/* Navigation section - full width at top */}
-        <div style={{
-          borderBottom: '1px solid var(--color-border)',
-          padding: 'var(--space-sm) var(--space-md)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
+        <div className="product-nav">
           <button
             onClick={() => router.push('/')}
-            style={{ 
-              fontSize: 'var(--font-xs)',
-              color: 'var(--color-text-muted)',
-              display: 'inline-block',
-              transition: 'color var(--transition-fast)',
-              letterSpacing: '0.05em',
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--color-primary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--color-text-muted)';
-            }}
+            className="product-nav-button"
           >
             ← Shop
           </button>
-          
+
           <button
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
@@ -87,118 +56,50 @@ export default function ProductPage({ product }) {
                 duration: 2000,
                 style: {
                   fontSize: 'calc(var(--font-xs) * 0.85)',
-                  // padding: 'calc(var(--space-xs) * 0.7) var(--space-xs) var(--space-xs) var(--space-sm)',
                   minHeight: 'auto',
                   maxWidth: '200px',
-                  height: 'calc(var(--header-height) - 13px)',
+                  height: 'calc(var(--header-height) - 13px)'
                 }
               });
             }}
-            style={{
-              fontSize: 'var(--font-xs)',
-              color: 'var(--color-text-muted)',
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer',
-              letterSpacing: '0.05em',
-              transition: 'color var(--transition-fast)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--color-primary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--color-text-muted)';
-            }}
+            className="product-nav-button"
           >
             Share
           </button>
         </div>
 
         {/* Main content - Stack on mobile, side by side on tablet+ */}
-        <div className="product-layout" style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr' // Stack on mobile
-        }}>
+        <div className="product-layout">
           {/* Image Gallery - Left side (top on mobile) */}
           {images.length > 0 && (
-            <div className="product-image" style={{ 
-              position: 'relative',
-              width: '100%',
-              backgroundColor: 'var(--color-bg)',
-              borderBottom: '1px solid var(--color-border)' // Bottom border on mobile
-            }}>
+            <div className="product-image product-image--main">
               {/* Main Image */}
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '1 / 1'
-              }}>
+              <div className="product-image-inner">
                 <Image 
                   src={currentImage.url} 
                   alt={currentImage.altText || product.title}
                   width={800}
                   height={800}
                   priority
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover',
-                    display: 'block'
-                  }} 
+                  className="product-main-img"
                 />
               </div>
 
               {/* Thumbnail Navigation - Only show if multiple images */}
               {images.length > 1 && (
-                <div style={{
-                  display: 'flex',
-                  gap: 'var(--space-sm)',
-                  padding: 'var(--space-sm)',
-                  backgroundColor: 'var(--color-bg)',
-                  borderTop: '1px solid var(--color-border)',
-                  overflowX: 'auto'
-                }}>
+                <div className="product-thumbs">
                   {images.map((img, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      style={{
-                        position: 'relative',
-                        width: '60px',
-                        height: '60px',
-                        flexShrink: 0,
-                        border: currentImageIndex === index 
-                          ? '1px solid var(--color-primary)' 
-                          : '1px solid var(--color-border)',
-                        padding: 0,
-                        cursor: 'pointer',
-                        backgroundColor: 'var(--color-bg)',
-                        opacity: currentImageIndex === index ? 1 : 0.6,
-                        transition: 'all var(--transition-fast)'
-                      }}
-                      onMouseEnter={(e) => {
-                        if (currentImageIndex !== index) {
-                          e.currentTarget.style.opacity = '0.8';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (currentImageIndex !== index) {
-                          e.currentTarget.style.opacity = '0.6';
-                        }
-                      }}
+                      className={`product-thumb-button ${currentImageIndex === index ? 'active' : ''}`}
                     >
                       <Image 
                         src={img.url} 
                         alt={img.altText || `${product.title} - Image ${index + 1}`}
                         width={60}
                         height={60}
-                        style={{ 
-                          width: '100%', 
-                          height: '100%', 
-                          objectFit: 'cover',
-                          display: 'block'
-                        }} 
+                        className="product-thumb-img"
                       />
                     </button>
                   ))}
@@ -208,49 +109,19 @@ export default function ProductPage({ product }) {
           )}
 
           {/* Product Info - Right side with internal borders */}
-          <div style={{ 
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
+          <div className="product-info-right">
             {/* Title section */}
-            <div style={{
-              borderBottom: '1px solid var(--color-border)',
-              padding: 'var(--space-lg)'
-            }}>
-              <h1 style={{ 
-                fontSize: 'var(--font-2xl)',
-                fontWeight: 500,
-                margin: 0,
-                letterSpacing: '-0.02em',
-                color: 'var(--color-primary)'
-              }}>
-                {product.title}
-              </h1>
+            <div className="product-title-section">
+              <h1 className="product-title">{product.title}</h1>
             </div>
 
           {/* Price section */}
-          <div style={{
-            borderBottom: '1px solid var(--color-border)',
-            padding: 'var(--space-lg)'
-          }}>
-            <p style={{ 
-              fontSize: 'var(--font-xl)',
-              color: 'var(--color-text-secondary)',
-              margin: 0,
-              fontWeight: 400
-            }}>
-              {priceInfo.split(' ')[0]} <span style={{ fontSize: 'var(--font-base)' }}>{priceInfo.split(' ')[1]}</span>
-            </p>
+          <div className="product-price-section">
+            <p className="product-price">{priceInfo.split(' ')[0]} <span style={{ fontSize: 'var(--font-base)' }}>{priceInfo.split(' ')[1]}</span></p>
           </div>
 
           {/* Action section */}
-          <div style={{
-            padding: 'var(--space-lg)',
-            borderBottom: '1px solid var(--color-border)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start'
-          }}>
+          <div className="product-actions">
             <button
               onClick={async () => {
                 if (isOutOfStock) return; // Don't add if out of stock
@@ -259,79 +130,22 @@ export default function ProductPage({ product }) {
                 if (res) setAdded(true);
               }}
               disabled={loading || isOutOfStock}
-              style={{ 
-                padding: 'var(--space-md) var(--space-2xl)',
-                fontSize: 'var(--font-base)',
-                fontWeight: 400,
-                backgroundColor: isOutOfStock ? '#f5f5f5' : 'var(--color-primary)',
-                color: isOutOfStock ? '#999' : '#fff',
-                border: isOutOfStock ? '1px solid #ccc' : '1px solid var(--color-border)',
-                borderRadius: 'var(--border-radius)',
-                cursor: (loading || isOutOfStock) ? 'not-allowed' : 'pointer',
-                transition: 'all var(--transition-fast)',
-                width: '100%',
-                transform: 'none',
-                opacity: isOutOfStock ? 0.6 : 1
-              }}
-            onMouseEnter={(e) => {
-              if (!loading && !isOutOfStock) {
-                e.currentTarget.style.backgroundColor = '#fff';
-                e.currentTarget.style.color = 'var(--color-primary)';
-                e.currentTarget.style.border = '1px solid var(--color-primary)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isOutOfStock) {
-                e.currentTarget.style.backgroundColor = 'var(--color-primary)';
-                e.currentTarget.style.color = '#fff';
-         
-              } else {
-                e.currentTarget.style.backgroundColor = '#f5f5f5';
-                e.currentTarget.style.color = '#999';
-                e.currentTarget.style.border = '1px solid #ccc';
-              }
-            }}
-          >
-            {isOutOfStock ? 'Out of Stock' : (loading ? 'Adding…' : 'Add to Cart')}
-          </button>
+              className={`product-add-button ${isOutOfStock ? 'out-of-stock' : ''} ${loading ? 'loading' : ''}`}
+            >
+              {isOutOfStock ? 'Out of Stock' : (loading ? 'Adding…' : 'Add to Cart')}
+            </button>
 
-          {/* Success message */}
-          {added && (
-            <p style={{ 
-              marginTop: 'var(--space-md)',
-              fontSize: 'var(--font-sm)',
-              color: 'var(--color-text-muted)'
-            }}>
-              Added to cart
-            </p>
-          )}
+            {/* Success message */}
+            {added && (
+              <p className="product-add-success">Added to cart</p>
+            )}
           </div>
 
           {/* Description section */}
           {product.description && (
-            <div style={{
-              padding: 'var(--space-lg)'
-            }}>
-              <h2 style={{
-                fontSize: 'var(--font-sm)',
-                fontWeight: 500,
-                color: 'var(--color-primary)',
-                marginBottom: 'var(--space-sm)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>
-                Description
-              </h2>
-              <p style={{ 
-                fontSize: 'var(--font-sm)',
-                color: 'var(--color-text-secondary)',
-                margin: 0,
-                lineHeight: 1.6,
-                fontWeight: 400,
-                whiteSpace: 'pre-line'
-              }}>
-                {product.description}
-              </p>
+            <div className="product-description-section">
+              <h2 className="product-description-title">Description</h2>
+              <p className="product-description-text">{product.description}</p>
             </div>
           )}
         </div>
