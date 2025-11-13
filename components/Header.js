@@ -1,58 +1,65 @@
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import Image from 'next/image';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Header() {
   const { checkout, openCart } = useCart();
   const count = checkout?.lineItems?.edges?.reduce((s, e) => s + (e.node?.quantity || 0), 0) || 0;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function handleOutside(e) {
+      const target = e.target;
+      if (menuRef.current && !menuRef.current.contains(target) && toggleRef.current && !toggleRef.current.contains(target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, [menuOpen]);
   
   return (
-    <header className="site-header" style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 'var(--header-height)',
-      backgroundColor: 'var(--color-bg)',
-      borderBottom: '1px solid var(--color-primary)',
-      zIndex: 100,
-      backdropFilter: 'blur(8px)',
-      backgroundColor: 'rgba(255, 255, 255, 0.95)'
-    }}>
-      <div style={{
-        maxWidth: 'var(--max-width)',
-        margin: '0 auto',
-        height: '100%',
-        padding: '0 var(--container-padding)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
+    <header className="site-header">
+      <div className="header-inner">
         {/* Logo/Brand - Minimal wordmark */}
-        <Link href="/" style={{
-          fontSize: 'var(--font-lg)',
-          fontWeight: 500,
-          color: 'var(--color-primary)',
-        //   letterSpacing: '-0.01em',
-          transition: 'opacity var(--transition-fast)',
-          width: '5em',
-        }}>
+        {/* Desktop: normal link */}
+        <Link href="/" className="hide-mobile brand-link">
           Atelier 3
         </Link>
 
+        {/* Mobile: logo acts as a menu toggle (does not navigate) */}
+        <button
+          ref={toggleRef}
+          className="hide-desktop mobile-logo-button"
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          Atelier 3
+        </button>
+
+        {/* Mobile dropdown anchored to the left (logo) */}
+        {menuOpen && (
+          <div ref={menuRef} role="menu" aria-label="Site menu" className="mobile-menu">
+            <Link href="/" role="menuitem" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link href="/products" role="menuitem" onClick={() => setMenuOpen(false)}>All Products</Link>
+            <Link href="/contact" role="menuitem" onClick={() => setMenuOpen(false)}>Contact</Link>
+          </div>
+        )}
+
         {/* Navigation - Center */}
-        <nav style={{
-          display: 'flex',
-          gap: 'var(--space-xl)',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          width: '100%',
-          paddingLeft: 'var(--space-2xl)',
-          fontSize: 'var(--font-base)',
-          color: 'var(--color-text-primary)',
-          textDecoration: 'none',
-          transition: 'color var(--transition-fast)',
-        }}>
+        <nav className="header-nav hide-mobile">
           <Link 
             href="/"
             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
@@ -77,48 +84,10 @@ export default function Header() {
         </nav>
 
         {/* Cart Button - Responsive sizing */}
-        <button 
-          onClick={openCart}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0 .8rem',
-            backgroundColor: 'transparent',
-            color: 'var(--color-text)',
-            fontSize: 'var(--font-sm)',
-            fontWeight: 400,
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--border-radius)',
-            transition: 'all var(--transition-fast)',
-            minHeight: '40px',
-            minWidth: '44px'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--color-primary)';
-            e.currentTarget.style.backgroundColor = 'var(--color-bg-secondary)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--color-border)';
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
-        >
+        <button onClick={openCart} className="cart-button">
           <span> <Image src="/cart.png" alt="Cart" width={30} height={30} /> </span>
           {count > 0 && (
-            <span style={{
-              backgroundColor: 'var(--color-primary)',
-              color: '#fff',
-             padding: '2px 8px',
-              borderRadius: '50%',
-              fontSize: 'var(--font-sm)',
-              fontWeight: 500,
-              minWidth: '18px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              {count}
-            </span>
+            <span className="cart-count">{count}</span>
           )}
         </button>
       </div>

@@ -4,13 +4,14 @@ import CollectionCard from "../components/CollectionCard";
 
 export default function Home({ collections }) {
   const heroImage =
-    collections && collections.length > 0 ? collections[0].image : null;
+    collections && collections.length > 0 ? collections[3].image : null;
 
   return (
     <>
       {/* Full-viewport hero section */}
       <section
         aria-label="Homepage hero"
+        className="hero-banner"
         style={{
           // height: "calc(100vh - var(--header-height))",
           marginTop: "var(--header-height)",
@@ -68,7 +69,7 @@ export default function Home({ collections }) {
           >
             <h1
               style={{
-                fontSize: "8rem",
+                fontSize: "7.5rem",
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
                 lineHeight: 0.9,
