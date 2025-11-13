@@ -206,7 +206,6 @@ h5,
 h6 {
   font-weight: 500;
   line-height: 1.2;
-  letter-spacing: -0.02em;
   color: var(--color-primary);
 }
 
@@ -541,7 +540,7 @@ img {
   font-weight: 400;
   margin: 0;
   color: var(--color-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: 0em;
 }
 .collection-count {
   margin: 0;
@@ -566,7 +565,7 @@ img {
 .collection-title {
   font-size: var(--font-2xl);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   margin-bottom: var(--space-sm);
   color: var(--color-text);
 }
@@ -621,7 +620,7 @@ img {
 .products-title {
   font-size: var(--font-2xl);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   margin-bottom: var(--space-sm);
   color: var(--color-text);
 }
