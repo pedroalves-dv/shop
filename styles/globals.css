@@ -53,7 +53,7 @@
   --max-width: 1280px;
   --container-padding: 1rem;
   --border-radius: 2px;
-  --header-height: 56px;
+  --header-height: 60px;
 
   /* Grid */
   --grid-columns: 1;
@@ -164,6 +164,10 @@ img {
   margin-bottom: var(--container-padding) !important;
 }
 
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+}
 .hide-mobile {
   display: none;
 }
@@ -271,7 +275,7 @@ img {
   font-size: var(--font-sm);
   font-weight: 400;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   transition: all var(--transition-fast);
   min-height: 40px;
   min-width: 44px;
@@ -357,9 +361,19 @@ img {
 
 /* -----------------------------
    Footer component
-   Selectors used: .footer-top, .footer-links, .footer-bottom
+   Selectors used: .footer-content, .footer-links
    ----------------------------- */
-.footer-top {
+
+.footer-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--container-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.footer-content {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-lg);
@@ -371,11 +385,114 @@ img {
   gap: var(--space-lg);
 }
 
-.footer-bottom {
+.site-footer {
+  border-top: 1px solid var(--color-primary);
+  margin-top: var(--space-xl);
+  background-color: var(--color-bg);
+}
+
+.footer-tagline {
+  margin-top: var(--space-xs);
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  max-width: 300px;
+}
+
+.socials {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-md);
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.social-link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.social-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-column {
   display: flex;
   flex-direction: column;
-  text-align: center;
   gap: var(--space-sm);
+}
+
+.footer-column h3 {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.footer-link {
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+.newsletter-copy{
+ font-size: var(--font-sm);
+ color: var(--color-secondary);
+}
+
+
+.newsletter-form {
+  display: flex;
+  gap: var(--space-sm);
+  flex-direction: column;
+}
+
+.newsletter-input {
+  padding: var(--space-sm);
+  font-size: var(--font-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  width: 100%;
+}
+
+.newsletter-input:focus {
+  border-color: var(--color-primary);
+}
+
+.newsletter-button {
+  padding: var(--space-sm);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.newsletter-button:hover {
+  background-color: #fff;
+  color: var(--color-primary);
+}
+
+/* Newsletter column width (kept from inline styles) */
+.newsletter-column {
+  min-width: 280px;
 }
 
 /* -----------------------------
@@ -422,7 +539,7 @@ img {
   }
 
   /* Footer layout on tablet+ */
-  .footer-top {
+  .footer-content {
     grid-template-columns: 1fr 1fr !important;
   }
 
@@ -430,12 +547,6 @@ img {
     flex-direction: row !important;
     justify-content: flex-end !important;
     gap: var(--space-2xl) !important;
-  }
-
-  .footer-bottom {
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    text-align: left !important;
   }
 
   /* Collections grid increases columns on larger screens */
