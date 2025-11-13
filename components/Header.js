@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
+import Image from 'next/image';
 
 export default function Header() {
   const { checkout, openCart } = useCart();
@@ -7,7 +8,7 @@ export default function Header() {
   
   return (
     <header className="site-header" style={{
-      position: 'sticky',
+      position: 'fixed',
       top: 0,
       left: 0,
       right: 0,
@@ -22,20 +23,21 @@ export default function Header() {
         maxWidth: 'var(--max-width)',
         margin: '0 auto',
         height: '100%',
-        padding: '0 var(--container-padding)', // Now uses responsive padding
+        padding: '0 var(--container-padding)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
       }}>
         {/* Logo/Brand - Minimal wordmark */}
         <Link href="/" style={{
-          fontSize: 'var(--font-lg)', // Slightly larger, scales with viewport
+          fontSize: 'var(--font-lg)',
           fontWeight: 500,
           color: 'var(--color-primary)',
         //   letterSpacing: '-0.01em',
-          transition: 'opacity var(--transition-fast)'
+          transition: 'opacity var(--transition-fast)',
+          width: '5em',
         }}>
-          Prototype
+          Atelier 3
         </Link>
 
         {/* Navigation - Center */}
@@ -81,7 +83,7 @@ export default function Header() {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            padding: '0 0.8rem',
+            padding: '0 .8rem',
             backgroundColor: 'transparent',
             color: 'var(--color-text)',
             fontSize: 'var(--font-sm)',
@@ -89,7 +91,7 @@ export default function Header() {
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--border-radius)',
             transition: 'all var(--transition-fast)',
-            minHeight: '40px', // Touch-friendly size for mobile
+            minHeight: '40px',
             minWidth: '44px'
           }}
           onMouseEnter={(e) => {
@@ -101,17 +103,19 @@ export default function Header() {
             e.currentTarget.style.backgroundColor = 'transparent';
           }}
         >
-          <span>Cart</span>
+          <span> <Image src="/cart.png" alt="Cart" width={30} height={30} /> </span>
           {count > 0 && (
             <span style={{
               backgroundColor: 'var(--color-primary)',
               color: '#fff',
-              padding: '1px 6px',
-              borderRadius: '10px',
-              fontSize: 'var(--font-xs)',
+             padding: '2px 8px',
+              borderRadius: '50%',
+              fontSize: 'var(--font-sm)',
               fontWeight: 500,
               minWidth: '18px',
-              textAlign: 'center'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
               {count}
             </span>

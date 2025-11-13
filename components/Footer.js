@@ -41,7 +41,7 @@ export default function Footer() {
                 textDecoration: "none",
               }}
             >
-              Prototype
+              Atelier 3
             </Link>
             <p
               style={{
