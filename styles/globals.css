@@ -209,10 +209,10 @@ h6 {
   color: var(--color-primary);
 }
 
-h1 {
-  font-size: var(--font-2xl);
+/* h1 {
+  font-size: var(--font-xs);
   font-weight: 600;
-}
+} */
 h2 {
   font-size: var(--font-xl);
   margin-bottom: var(--space-lg);
@@ -416,24 +416,68 @@ img {
 
 /* -----------------------------
    Hero component
-   Selectors used: .hero-banner, .hero-inner, .hero-overlay
+   Selectors used: .hero-banner, .hero-banner-bg, .hero-inner, .hero-content, .hero-title, .hero-overlay
+   - Behavior: hide hero on small screens and show on tablet+ (>=768px)
    ----------------------------- */
 .hero-banner {
+  /* Hidden on mobile by default so the collections grid is the first thing visible */
   display: none;
+  position: relative;
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero-banner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
 }
 
 .hero-inner {
   position: relative;
-  min-height: 60vh;
+  /* min-height: 60vh; */
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
+}
+
+.hero-content {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--container-padding);
+}
+
+.hero-title {
+  margin-top: 1em;
+  color: #fff;
+  line-height: 0.95;
+  font-weight: 700;
+  font-size: 7.5rem;
+  letter-spacing: -0.02em;
+  word-break: break-word;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45));
+  z-index: 1;
+}
+
+/* Helpers for home page layout when hero is hidden */
+.home-container {
+  margin: var(--header-height) auto 0 auto;
+  padding-top: var(--space-md);
+}
+
+.home-collections-grid {
+  width: 100%;
+  margin-bottom: var(--space-lg);
 }
 
 /* -----------------------------
@@ -595,8 +639,9 @@ img {
 }
 
 .product-page-container {
-  margin: var(--header-height) auto 0 auto;
+  margin: var(--header-height) auto;
   padding-top: var(--space-xl);
+  height: auto;
 }
 
 .product-image {
@@ -1112,22 +1157,10 @@ img {
     --container-padding: 1.5rem;
   }
 
-  /* Show hero on tablet+ */
-  .hero-banner {
-    display: grid !important;
-  }
-
   /* Restore product layout and spacing on tablet+ */
   .product-card {
     margin-top: var(--space-xs) !important;
   }
-
-  /* .product-page-container {
-    padding-top: var(--space-lg) !important;
-    padding-left: var(--space-xs) !important;
-    padding-right: var(--space-xs) !important;
-    padding-bottom: var(--space-md) !important;
-  } */
 
   /* Footer layout on tablet+ */
   .footer-content {
@@ -1148,6 +1181,19 @@ img {
   /* Cart drawer max width sits at right on tablet+ */
   .cart-drawer {
     width: 420px;
+  }
+
+  /* Show hero on tablet+ and remove mobile offset for content */
+  .hero-banner {
+    display: block !important;
+    margin-top: var(--header-height);
+    min-height: 60vh;
+    height: calc(100vh - var(--header-height));
+  }
+
+  .home-container {
+    margin: 0 auto;
+    padding-top: var(--space-xl);
   }
 }
 

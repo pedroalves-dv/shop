@@ -9,102 +9,30 @@ export default function Home({ collections }) {
   return (
     <>
       {/* Full-viewport hero section */}
-      <section
-        aria-label="Homepage hero"
-        className="hero-banner"
-        style={{
-          // height: "calc(100vh - var(--header-height))",
-          marginTop: "var(--header-height)",
-          height: "calc(100vh - var(--header-height))",
-          minHeight: "560px",
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          color: "#fff",
-          backgroundColor: "var(--color-bg)",
-        }}
-      >
+      <section aria-label="Homepage hero" className="hero-banner">
         {/* Background image or gradient fallback */}
         <div
+          className="hero-banner-bg"
           style={{
-            position: "absolute",
-            inset: 0,
             backgroundImage: heroImage
               ? `url(${heroImage})`
               : "linear-gradient(180deg, #111 0%, #222 100%)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            zIndex: 0,
           }}
         />
 
-        {/* Dark overlay to improve text contrast */}
-        {/* <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 100%)",
-            zIndex: 1,
-          }}
-        /> */}
-
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            width: "100%",
-            maxWidth: "var(--max-width)",
-            margin: "0 auto",
-            padding: "0 var(--container-padding)",
-          }}
-        >
-          <div
-            style={{
-              paddingTop: "var(--space-xl)",
-              paddingBottom: "var(--space-xl)",
-              maxWidth: "860px",
-            }}
-          >
-            <h1
-              style={{
-                fontSize: "7.5rem",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                lineHeight: 0.9,
-                marginBottom: "var(--space-xl)",
-                color: "#fff",
-              }}
-            >
-              Thoughtful <br /> and functional design.
+        <div className="hero-inner">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              Thoughtful <br /> and functional <br /> design.
             </h1>
-            {/* <p
-              style={{
-                fontSize: "var(--font-xl)",
-                color: "rgba(255,255,255,0.85)",
-                maxWidth: "60%",
-              }}
-            >
-              Discover products that blend form and function.
-            </p> */}
           </div>
         </div>
       </section>
 
       {/* Main content with collections grid underneath the hero */}
-      <div
-        className="container"
-        style={{ paddingTop: "var(--space-xl)", paddingBottom: "0" }}
-      >
+      <div className="container home-container">
         {/* Collections Grid - 2 columns max on desktop */}
-        <div
-          className="responsive-grid collections-grid"
-          style={{
-            width: "100%",
-            marginBottom: "var(--space-lg)",
-          }}
-        >
+        <div className="responsive-grid collections-grid home-collections-grid">
           {collections.map((collection, index) => (
             <CollectionCard
               key={collection.id}
