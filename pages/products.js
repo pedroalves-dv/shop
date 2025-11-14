@@ -1,3 +1,9 @@
+/*
+  Products listing page (pages/products.js)
+  - What it is: displays all products in a responsive grid using ProductCard.
+  - What it controls (CSS classes): .products-page, .products-header, .products-grid, .products-title
+  - Notes: data is fetched in getStaticProps; change grid columns via --grid-columns or .products-grid.
+*/
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 

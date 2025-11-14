@@ -1,0 +1,152 @@
+/* -----------------------------
+  Product component
+  Selectors used: .product-layout, .product-image, .product-page-container
+   ----------------------------- */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: visible;
+  background-color: #fff;
+}
+
+.product-image-wrap {
+  position: relative;
+  overflow: visible;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+  transform: translate(0, 0);
+  transition: transform var(--transition-fast);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.product-image-wrap:hover {
+  transform: translate(-4px, -4px);
+}
+
+.product-image-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-secondary);
+  margin-bottom: -1px;
+  overflow: hidden;
+  z-index: 3;
+  transition: border var(--transition-fast);
+}
+
+.product-image-wrap:hover .product-image-box {
+  border: 1px solid var(--color-primary);
+}
+
+.product-image-box img,
+.product-image-box :where(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.extrusion-right {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  width: 4px;
+  height: 100%;
+  background-color: var(--color-primary);
+  transform: scaleY(0);
+  transform-origin: top left;
+  transition: transform var(--transition-fast);
+  z-index: 2;
+}
+
+.product-image-wrap:hover .extrusion-right {
+  transform: skewY(45deg);
+}
+
+.extrusion-bottom {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: top left;
+  transition: transform var(--transition-fast);
+  z-index: 2;
+}
+
+.product-image-wrap:hover .extrusion-bottom {
+  transform: skewX(45deg);
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  flex: 1;
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-info h3 {
+  font-size: var(--font-base);
+  font-weight: 400;
+  margin: 0;
+  color: var(--color-primary);
+  letter-spacing: -0.01em;
+}
+
+.product-info p {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.product-action {
+  padding: var(--space-sm);
+}
+
+.product-button {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-sm);
+  font-weight: 400;
+  border: 1px solid var(--color-primary);
+  background-color: transparent;
+  color: var(--color-text);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.product-button:disabled,
+.product-button.out-of-stock {
+  border-color: #ccc;
+  color: #999;
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.product-button:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.product-button.loading {
+  cursor: progress;
+}
+
+.product-add-success {
+  margin-top: var(--space-md);
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+}

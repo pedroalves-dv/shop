@@ -1,0 +1,20 @@
+/* -----------------------------
+   Base (foundation)
+   - Global element-level helpers that form the typographic and accessibility baseline
+   - Note: core element defaults (html, body, headings, img, button) live in reset.css
+   ----------------------------- */
+
+/* Screen-reader only helper */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Small base helpers: add non-opinionated helpers here as needed */

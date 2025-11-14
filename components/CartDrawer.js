@@ -1,3 +1,10 @@
+/*
+  CartDrawer component
+  - What it is: slide-in cart drawer shown from the header/cart button.
+  - What it controls (CSS classes): .cart-drawer-overlay, .cart-drawer, .cart-drawer-header,
+    .cart-drawer-content, .cart-item, .cart-qty, .cart-checkout-button, .cart-drawer-footer
+  - Notes: reads/writes cart via CartContext; confirmation and quantity controls live here.
+*/
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';

@@ -1,3 +1,10 @@
+/*
+  Product detail page (pages/product/[handle].js)
+  - What it is: the product detail view — image gallery, title, price, add-to-cart and description.
+  - What it controls (CSS classes): .product-page-container, .product-layout, .product-image--main,
+    .product-thumbs, .product-title, .product-price, .product-add-button, .product-description-section
+  - Notes: uses SSG (getStaticPaths/getStaticProps). Gallery state is local to this page.
+*/
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -14,11 +21,9 @@ export default function ProductPage({ product }) {
 
   if (!product) {
     return (
-      <div className="container" style={{ paddingTop: 'var(--space-xs)' }}>
-        <p style={{ color: 'var(--color-text-secondary)' }}>Product not found</p>
-        <Link href="/" style={{ fontSize: 'var(--font-sm)', marginTop: 'var(--space-xs)', display: 'inline-block' }}>
-          ← Back to shop
-        </Link>
+      <div className="container product-notfound-container">
+        <p className="product-notfound-text">Product not found</p>
+        <Link href="/" className="product-back-link">← Back to shop</Link>
       </div>
     );
   }
@@ -117,7 +122,7 @@ export default function ProductPage({ product }) {
 
           {/* Price section */}
           <div className="product-price-section">
-            <p className="product-price">{priceInfo.split(' ')[0]} <span style={{ fontSize: 'var(--font-base)' }}>{priceInfo.split(' ')[1]}</span></p>
+            <p className="product-price">{priceInfo.split(' ')[0]} <span className="product-price-currency">{priceInfo.split(' ')[1]}</span></p>
           </div>
 
           {/* Action section */}

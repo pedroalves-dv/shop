@@ -5,7 +5,7 @@ export default function Collection({ collection }) {
   if (!collection) {
     return (
       <div className="collection-page">
-        <div className="collection-header" style={{ textAlign: 'center' }}>
+        <div className="collection-header collection-header--center">
           <h1>Collection not found</h1>
         </div>
       </div>
@@ -24,7 +24,7 @@ export default function Collection({ collection }) {
 
       {/* Products Grid */}
       {collection.products.length > 0 ? (
-        <div className="responsive-grid collections-grid">
+        <div className="responsive-grid products-grid">
           {collection.products.map((product) => (
             <ProductCard 
               key={product.id} 

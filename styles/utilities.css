@@ -1,0 +1,33 @@
+/* -----------------------------
+   Utilities
+   - Small, reusable helpers used across components
+   ----------------------------- */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gap);
+  margin-bottom: var(--container-padding) !important;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.hide-mobile {
+  display: none;
+}
+
+.hide-desktop {
+  display: flex;
+}
+
+@media (width >= 768px) {
+  .hide-mobile {
+    display: flex;
+  }
+
+  .hide-desktop {
+    display: none;
+  }
+}

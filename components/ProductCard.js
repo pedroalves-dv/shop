@@ -1,3 +1,10 @@
+/*
+  ProductCard component
+  - What it is: a reusable product tile used in listing grids and small product lists.
+  - What it controls (CSS classes): .product-card, .product-image-wrap, .product-image-box,
+    .extrusion-right, .extrusion-bottom, .product-info, .product-action, .product-button
+  - Notes: purely presentational; Add-to-cart behavior is triggered via CartContext.
+*/
 // Import Next.js components for navigation and optimized images
 import Link from 'next/link';
 import Image from 'next/image';

@@ -1,5 +1,11 @@
+/*
+  Homepage (pages/index.js)
+  - What it is: the site homepage. Renders the hero and a grid of collections.
+  - What it controls (CSS classes): .hero-banner, .hero-banner-bg, .hero-inner, .hero-title,
+    .home-container, .home-collections-grid, and uses CollectionCard for individual tiles.
+  - Notes: hero backgroundImage is set inline at runtime for LCP/SSR reasons.
+*/
 import axios from "axios";
-import Link from "next/link";
 import CollectionCard from "../components/CollectionCard";
 
 export default function Home({ collections }) {

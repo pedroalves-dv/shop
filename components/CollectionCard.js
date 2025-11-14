@@ -1,3 +1,10 @@
+/*
+  CollectionCard component
+  - What it is: renders a collection tile used on the homepage and collection lists.
+  - What it controls (CSS classes): .collection-card, .collection-image-wrap, .collection-image-box,
+    .collection-extrusion-right, .collection-extrusion-bottom, .collection-info, .collection-card-title
+  - Notes: links into /collections/[handle]. Keep image aspect and hover extrusion here.
+*/
 import Link from 'next/link';
 import Image from 'next/image';
 
