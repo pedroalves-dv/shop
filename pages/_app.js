@@ -9,6 +9,7 @@ import "@/styles/components/product-card.css";
 import "@/styles/components/collection-card.css";
 import "@/styles/globals.css";
 import { CartProvider, useCart } from '../context/CartContext';
+import { CollectionsProvider } from '../context/CollectionsContext';
 import { Toaster } from 'react-hot-toast';
 import CartDrawer from '../components/CartDrawer';
 import Header from '../components/Header';
@@ -55,16 +56,18 @@ function CartContent({ Component, pageProps }) {
       />
       
       {/* Main layout wrapper - ensures footer stays at bottom */}
-      <div className="app-root">
-        <Header />
-        
-        {/* Main content - grows to push footer down */}
-        <main className="app-main">
-          <Component {...pageProps} />
-        </main>
-        
-        <Footer />
-      </div>
+          <div className="app-root">
+            <CollectionsProvider collections={pageProps.collections}>
+              <Header />
+
+              {/* Main content - grows to push footer down */}
+              <main className="app-main">
+                <Component {...pageProps} />
+              </main>
+
+              <Footer />
+            </CollectionsProvider>
+          </div>
       
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
     </>
