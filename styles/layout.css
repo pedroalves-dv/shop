@@ -193,7 +193,7 @@
 
   .home-container {
     margin: 0 auto;
-    padding-top: var(--space-xl);
+    padding-top: var(--space-2xl);
   }
 
   /* Footer layout on tablet+ */

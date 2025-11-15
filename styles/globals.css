@@ -11,7 +11,38 @@
 }
 
 /* ----------------------------------- */
-/* Collection Page                     */
+/* All Collections Page                */
+/* ----------------------------------- */
+
+.collections-page {
+  max-width: var(--max-width);
+  margin: var(--header-height) auto 0 auto;
+  padding-top: var(--space-xl);
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+.collections-header {
+  margin-bottom: var(--space-xl);
+  text-align: start;
+}
+
+.collections-title {
+  font-size: var(--font-2xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+}
+
+.collections-subtitle {
+  font-size: var(--font-md);
+  color: var(--color-text-muted);
+  max-width: 600px;
+}
+
+/* ----------------------------------- */
+/* Collection Page (Single)            */
 /* ----------------------------------- */
 
 .collection-page {

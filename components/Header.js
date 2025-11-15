@@ -54,6 +54,7 @@ export default function Header() {
           <div ref={menuRef} role="menu" aria-label="Site menu" className="mobile-menu">
             <Link href="/" role="menuitem" onClick={() => setMenuOpen(false)}>Home</Link>
             <Link href="/products" role="menuitem" onClick={() => setMenuOpen(false)}>All Products</Link>
+            <Link href="/collections" role="menuitem" onClick={() => setMenuOpen(false)}>Collections</Link>
             <Link href="/contact" role="menuitem" onClick={() => setMenuOpen(false)}>Contact</Link>
           </div>
         )}
@@ -73,6 +74,13 @@ export default function Header() {
             onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
           >
             All Products
+          </Link>
+          <Link 
+            href="/collections"
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+          >
+            Collections
           </Link>
           <Link 
             href="/contact"
