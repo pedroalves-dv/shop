@@ -46,6 +46,7 @@
   --max-width: 1280px;
   --container-padding: 1rem;
   --border-radius: 2px;
+  --border-radius-lg: 8px;
   --header-height: 60px;
 
   /* Grid */
@@ -64,6 +65,7 @@
 /* Responsive token overrides (tablet+) */
 @media (width >= 768px) {
   :root {
+    --space-2xs: 0.15rem;
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;

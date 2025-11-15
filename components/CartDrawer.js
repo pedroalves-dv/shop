@@ -17,6 +17,8 @@ export default function CartDrawer({ isOpen, onClose }) {
 
   const items = checkout?.lineItems?.edges?.map(e => e.node) || [];
   const totalAmount = checkout?.cost?.totalAmount;
+  // total number of units in the cart (sum of quantities)
+  const totalItems = items.reduce((sum, it) => sum + (it.quantity || 0), 0);
 
   return (
     <>
@@ -32,7 +34,7 @@ export default function CartDrawer({ isOpen, onClose }) {
       <div className={`cart-drawer ${isOpen ? 'open' : ''}`}>
         {/* Header */}
         <div className="cart-drawer-header">
-          <h2 className="cart-drawer-title">Shopping Cart ({items.length})</h2>
+          <h2 className="cart-drawer-title">Shopping Cart ({totalItems})</h2>
           <button onClick={onClose} className="cart-drawer-close">✖</button>
         </div>
 
@@ -71,6 +73,7 @@ export default function CartDrawer({ isOpen, onClose }) {
 
                       {/* Middle: Quantity Controls */}
                       <div className="cart-qty">
+                      <div className="cart-qty-controls">
                         <button
                           onClick={() => updateQuantity(it.id, Math.max(1, it.quantity - 1))}
                           disabled={loading || it.quantity <= 1}
@@ -86,17 +89,19 @@ export default function CartDrawer({ isOpen, onClose }) {
                         >
                           +
                         </button>
-                      </div>
-
-                      {/* Bottom: Total & Remove */}
-                      <div className="cart-item-bottom">
-                        <strong className="cart-item-total">{lineTotal} {currency}</strong>
+                        </div>
                         <button onClick={() => removeFromCart(it.id)} disabled={loading} className="cart-remove-button" title="Remove item">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                           </svg>
                         </button>
+                      </div>
+
+                      {/* Bottom: Total & Remove */}
+                      <div className="cart-item-bottom">
+                        <strong className="cart-item-total">{lineTotal} {currency}</strong>
+                        
                       </div>
                     </div>
                   </div>
@@ -120,11 +125,11 @@ export default function CartDrawer({ isOpen, onClose }) {
                       setShowClearConfirm(false);
                       onClose();
                     }}
-                    className="cart-btn primary"
+                    className="cart-btn clear-secondary"
                   >
                     Yes, Clear
                   </button>
-                  <button onClick={() => setShowClearConfirm(false)} className="cart-btn secondary">Cancel</button>
+                  <button onClick={() => setShowClearConfirm(false)} className="cart-btn cancel-secondary">Cancel</button>
                 </div>
               </div>
             )}
@@ -139,8 +144,8 @@ export default function CartDrawer({ isOpen, onClose }) {
             </a>
 
             <div className="cart-actions">
-              <button onClick={onClose} className="cart-btn secondary">Continue Shopping</button>
-              <button onClick={() => setShowClearConfirm(true)} className="cart-btn secondary">Clear Cart</button>
+              <button onClick={onClose} className="cart-btn continue-primary">Continue Shopping</button>
+              <button onClick={() => setShowClearConfirm(true)} className="cart-btn clear-primary">Clear Cart</button>
             </div>
           </div>
         )}

@@ -21,10 +21,10 @@ html {
 body {
   font-family: var(--font-sans);
   font-size: var(--font-base);
-  line-height: 1.6;
   color: var(--color-text);
   background: var(--color-bg);
   overflow-x: hidden;
+  /* line-height: 1.2; */
 }
 
 /* Typography defaults */
@@ -35,7 +35,7 @@ h4,
 h5,
 h6 {
   font-weight: 500;
-  line-height: 1.2;
+  /* line-height: 1.2; */
   color: var(--color-primary);
 }
 
