@@ -4,6 +4,7 @@ import "@/styles/base.css";
 import "@/styles/utilities.css";
 import "@/styles/layout.css";
 import "@/styles/components/cart.css";
+import "@/styles/components/filter-bar.css";
 import "@/styles/components/product-card.css";
 import "@/styles/components/collection-card.css";
 import "@/styles/globals.css";

@@ -5,9 +5,50 @@
   - Notes: data is fetched in getStaticProps; change grid columns via --grid-columns or .products-grid.
 */
 import axios from 'axios';
+import { useState, useMemo } from 'react';
 import ProductCard from '../components/ProductCard';
+import FilterBar from '../components/FilterBar';
 
 export default function Products({ products }) {
+  const [inStock, setInStock] = useState(false);
+  const [activeCollections, setActiveCollections] = useState(new Set());
+
+  // derive list of collections present in products (unique)
+  const collections = useMemo(() => {
+    const map = new Map();
+    products.forEach((p) => {
+      (p.collections || []).forEach((c) => {
+        if (!map.has(c.handle)) map.set(c.handle, c);
+      });
+    });
+    return Array.from(map.values());
+  }, [products]);
+
+  const filtered = useMemo(() => {
+    let out = products;
+    if (inStock) {
+      out = out.filter((p) => p.variants.some((v) => v.quantityAvailable > 0));
+    }
+    if (activeCollections.size > 0) {
+      out = out.filter((p) => (p.collections || []).some((c) => activeCollections.has(c.handle)));
+    }
+    return out;
+  }, [products, inStock, activeCollections]);
+
+  function onToggleCollection(handle) {
+    setActiveCollections((prev) => {
+      const next = new Set(prev);
+      if (next.has(handle)) next.delete(handle);
+      else next.add(handle);
+      return next;
+    });
+  }
+
+  function onReset() {
+    setInStock(false);
+    setActiveCollections(new Set());
+  }
+
   return (
     <div className="products-page">
       {/* Page Header */}
@@ -16,9 +57,19 @@ export default function Products({ products }) {
         <p className="products-subtitle">Explore our full collection of thoughtfully designed products.</p>
       </div>
 
+      {/* Filter bar */}
+      <FilterBar
+        inStock={inStock}
+        onToggleInStock={setInStock}
+        onReset={onReset}
+        collections={collections}
+        activeCollections={activeCollections}
+        onToggleCollection={onToggleCollection}
+      />
+
       {/* Product Grid */}
       <div className="responsive-grid products-grid">
-        {products.map((product) => (
+        {filtered.map((product) => (
           <ProductCard 
             key={product.id} 
             product={product} 
@@ -42,6 +93,15 @@ export async function getStaticProps() {
           id
           handle
           title
+          collections(first: 10) {
+            edges {
+              node {
+                id
+                handle
+                title
+              }
+            }
+          }
           images(first: 1) {
             edges {
               node {
@@ -81,6 +141,7 @@ export async function getStaticProps() {
     title: edge.node.title,
     image: edge.node.images?.edges?.[0]?.node?.url || null,
     imageAlt: edge.node.images?.edges?.[0]?.node?.altText || edge.node.title,
+    collections: edge.node.collections?.edges?.map(c => ({ handle: c.node.handle, title: c.node.title })) || [],
     variants: edge.node.variants.edges.map(v => ({
       id: v.node.id,
       price: v.node.priceV2.amount,

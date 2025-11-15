@@ -35,7 +35,7 @@
   font-size: var(--font-2xl);
   font-weight: 600;
   letter-spacing: -0.03em;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
   color: var(--color-text);
 }
 
@@ -73,7 +73,7 @@
 }
 
 .products-header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   text-align: start;
 }
 
@@ -81,7 +81,7 @@
   font-size: var(--font-2xl);
   font-weight: 600;
   letter-spacing: -0.03em;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
   color: var(--color-text);
 }
 

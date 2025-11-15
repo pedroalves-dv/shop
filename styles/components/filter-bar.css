@@ -1,0 +1,29 @@
+.filter-bar {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  /* justify-content: space-between; */
+  margin-bottom: var(--space-xl);
+  width: 100%;
+}
+
+.filter-button {
+  padding: 8px 15px;
+  font-size: var(--font-sm);
+  border-radius: var(--border-radius-lg);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-button:hover {
+  background: var(--color-bg-secondary);
+}
+
+.filter-button.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
