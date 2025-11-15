@@ -7,6 +7,8 @@ export default function FilterBar({
   collections = [],
   activeCollections = new Set(),
   onToggleCollection,
+  sortOrder = 'none',
+  onToggleSort,
 }) {
   return (
     <div className="filter-bar">
@@ -26,6 +28,17 @@ export default function FilterBar({
         In stock
       </button>
 
+      {/* Price sort toggle: cycles none -> asc -> desc -> none */}
+      <button
+        type="button"
+        className={`filter-button ${sortOrder !== 'none' ? 'active' : ''}`}
+        onClick={() => onToggleSort && onToggleSort()}
+        aria-pressed={sortOrder !== 'none'}
+        title={sortOrder === 'none' ? 'Sort by price' : sortOrder === 'asc' ? 'Sorted: low → high (click to reverse)' : 'Sorted: high → low (click to reverse)'}
+      >
+        {sortOrder === 'none' ? 'Sort by price' : sortOrder === 'asc' ? 'Price: Low → High' : 'Price: High → Low'}
+      </button>
+
       {/* Collection toggles (multi-select) */}
       {collections.map((c) => (
         <button
@@ -37,6 +50,15 @@ export default function FilterBar({
           {c.title}
         </button>
       ))}
+
+      {/* Clear all filters (aligned to the far right) */}
+      <button
+        type="button"
+        className={`filter-button clear`}
+        onClick={() => onReset()}
+      >
+        Clear filters
+      </button>
     </div>
   );
 }

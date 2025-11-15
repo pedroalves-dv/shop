@@ -12,6 +12,7 @@ import FilterBar from '../components/FilterBar';
 export default function Products({ products }) {
   const [inStock, setInStock] = useState(false);
   const [activeCollections, setActiveCollections] = useState(new Set());
+  const [sortOrder, setSortOrder] = useState('none'); // 'none' | 'asc' | 'desc'
 
   // derive list of collections present in products (unique)
   const collections = useMemo(() => {
@@ -32,8 +33,26 @@ export default function Products({ products }) {
     if (activeCollections.size > 0) {
       out = out.filter((p) => (p.collections || []).some((c) => activeCollections.has(c.handle)));
     }
-    return out;
-  }, [products, inStock, activeCollections]);
+
+    // apply price sorting if requested
+    if (sortOrder === 'none') return out;
+
+    const withPrice = out.map((p) => {
+      const prices = (p.variants || []).map((v) => {
+        const n = parseFloat(v.price);
+        return Number.isFinite(n) ? n : Infinity;
+      });
+      const price = prices.length ? Math.min(...prices) : Infinity;
+      return { product: p, price };
+    });
+
+    withPrice.sort((a, b) => {
+      if (a.price === b.price) return 0;
+      return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
+    });
+
+    return withPrice.map((x) => x.product);
+  }, [products, inStock, activeCollections, sortOrder]);
 
   function onToggleCollection(handle) {
     setActiveCollections((prev) => {
@@ -47,6 +66,12 @@ export default function Products({ products }) {
   function onReset() {
     setInStock(false);
     setActiveCollections(new Set());
+    setSortOrder('none');
+  }
+
+
+  function onToggleSort() {
+    setSortOrder((prev) => (prev === 'none' ? 'asc' : prev === 'asc' ? 'desc' : 'none'));
   }
 
   return (
@@ -65,6 +90,8 @@ export default function Products({ products }) {
         collections={collections}
         activeCollections={activeCollections}
         onToggleCollection={onToggleCollection}
+        sortOrder={sortOrder}
+        onToggleSort={onToggleSort}
       />
 
       {/* Product Grid */}

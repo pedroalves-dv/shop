@@ -27,3 +27,15 @@
   color: #fff;
   border-color: var(--color-primary);
 }
+
+/* Clear button sits at the end of the bar */
+.filter-button.clear {
+  margin-left: auto;
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.filter-button.clear:hover {
+  background: var(--color-bg-secondary);
+}
