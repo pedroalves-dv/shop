@@ -153,7 +153,6 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-
 .product-image-inner {
   position: relative;
   width: 100%;
@@ -302,10 +301,6 @@
   color: var(--color-text-muted);
 }
 
-.product-card--spaced {
-  margin-top: var(--space-xl);
-}
-
 /* ----------------------------------- */
 /* Contact Page                        */
 /* ----------------------------------- */
@@ -423,11 +418,6 @@
 /* ----------------------------------- */
 
 @media (width >= 768px) {
-  /* Restore product layout and spacing on tablet+ */
-  .product-card {
-    margin-top: var(--space-xs) !important;
-  }
-
   /* Collections grid increases columns on larger screens */
   .collections-grid {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -463,7 +453,6 @@
     top: calc(var(--header-height) + var(--space-lg));
   }
 }
-
 
 /* ----------------------------------- */
 /* Cart Page (Single, NOT YET IN USE)  */

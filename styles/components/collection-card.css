@@ -37,6 +37,17 @@
   transition: border var(--transition-fast);
 }
 
+.collection-image-wrap:hover .collection-image-box {
+  /* Reveal the reserved border color on hover without changing element size */
+  border: 1px solid var(--color-primary);
+  /* optional: add a smooth outer stroke via box-shadow for crisper anti-aliased edge */
+  /* box-shadow: 0 0 0 1px rgba(17,17,17,0.04); */
+}
+
+.collection-image-wrap:hover .collection-image-box img {
+  transform: scale(calc(1 + 1px / 100%));
+}
+
 .collection-image-box img,
 .collection-image-box :where(img) {
   width: 100%;
